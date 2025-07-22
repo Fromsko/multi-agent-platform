@@ -1,0 +1,43 @@
+{
+  "apiKeys": [
+    {
+      "id": "1",
+      "name": "OpenAI GPT-4",
+      "provider": "openai",
+      "key": "sk-****************************",
+      "status": "active",
+      "usage": {
+        "current": 15420,
+        "limit": 100000
+      },
+      "createdAt": "2024-01-15T08:00:00Z",
+      "lastUsed": "2024-01-20T14:30:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Claude 3.5 Sonnet",
+      "provider": "anthropic",
+      "key": "sk-ant-**********************",
+      "status": "active",
+      "usage": {
+        "current": 8750,
+        "limit": 50000
+      },
+      "createdAt": "2024-01-16T10:15:00Z",
+      "lastUsed": "2024-01-20T13:45:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Gemini Pro",
+      "provider": "google",
+      "key": "AIza**********************",
+      "status": "inactive",
+      "usage": {
+        "current": 2340,
+        "limit": 25000
+      },
+      "createdAt": "2024-01-18T16:30:00Z",
+      "lastUsed": "2024-01-19T09:20:00Z"
+    }
+  ]
+}

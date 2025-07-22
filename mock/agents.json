@@ -1,0 +1,61 @@
+{
+  "agents": [
+    {
+      "id": "1",
+      "name": "客服助手",
+      "description": "处理客户咨询和问题解答",
+      "type": "对话型",
+      "status": "active",
+      "lastActivity": "2分钟前",
+      "interactions": 156,
+      "successRate": 98.5,
+      "avatar": "🤖",
+      "companyId": "1",
+      "skills": ["自然语言处理", "外部工具调用", "记忆管理"],
+      "config": {
+        "temperature": 0.7,
+        "maxTokens": 2048,
+        "memoryLength": 10
+      },
+      "createdAt": "2024-01-15T08:30:00Z"
+    },
+    {
+      "id": "2",
+      "name": "数据分析师",
+      "description": "执行数据分析和报告生成",
+      "type": "分析型",
+      "status": "idle",
+      "lastActivity": "1小时前",
+      "interactions": 89,
+      "successRate": 96.2,
+      "avatar": "📊",
+      "companyId": "2",
+      "skills": ["数据计算", "逻辑推理", "外部工具调用"],
+      "config": {
+        "temperature": 0.3,
+        "maxTokens": 4096,
+        "memoryLength": 15
+      },
+      "createdAt": "2024-01-16T09:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "文档助手",
+      "description": "文档处理和内容生成",
+      "type": "生成型",
+      "status": "active",
+      "lastActivity": "5分钟前",
+      "interactions": 234,
+      "successRate": 99.1,
+      "avatar": "📝",
+      "companyId": "3",
+      "skills": ["自然语言处理", "多模态处理", "记忆管理"],
+      "config": {
+        "temperature": 0.8,
+        "maxTokens": 3072,
+        "memoryLength": 8
+      },
+      "createdAt": "2024-01-17T11:20:00Z"
+    }
+  ]
+}

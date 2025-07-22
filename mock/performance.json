@@ -1,0 +1,52 @@
+{
+  "performance": [
+    {
+      "timestamp": "2024-01-20T00:00:00Z",
+      "tasks": 12,
+      "efficiency": 85,
+      "responseTime": 1.2,
+      "errorRate": 2.1,
+      "activeAgents": 8
+    },
+    {
+      "timestamp": "2024-01-20T04:00:00Z",
+      "tasks": 8,
+      "efficiency": 78,
+      "responseTime": 1.5,
+      "errorRate": 3.2,
+      "activeAgents": 5
+    },
+    {
+      "timestamp": "2024-01-20T08:00:00Z",
+      "tasks": 25,
+      "efficiency": 92,
+      "responseTime": 0.9,
+      "errorRate": 1.5,
+      "activeAgents": 12
+    },
+    {
+      "timestamp": "2024-01-20T12:00:00Z",
+      "tasks": 32,
+      "efficiency": 88,
+      "responseTime": 1.1,
+      "errorRate": 1.8,
+      "activeAgents": 15
+    },
+    {
+      "timestamp": "2024-01-20T16:00:00Z",
+      "tasks": 28,
+      "efficiency": 95,
+      "responseTime": 0.8,
+      "errorRate": 0.9,
+      "activeAgents": 14
+    },
+    {
+      "timestamp": "2024-01-20T20:00:00Z",
+      "tasks": 15,
+      "efficiency": 82,
+      "responseTime": 1.3,
+      "errorRate": 2.5,
+      "activeAgents": 9
+    }
+  ]
+}

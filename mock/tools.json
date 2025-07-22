@@ -1,0 +1,60 @@
+{
+  "tools": [
+    {
+      "id": "1",
+      "name": "Web搜索工具",
+      "description": "通过搜索引擎获取实时信息",
+      "type": "search",
+      "status": "active",
+      "provider": "serp-api",
+      "config": {
+        "apiKey": "****",
+        "engine": "google",
+        "maxResults": 10
+      },
+      "usage": {
+        "calls": 1250,
+        "errors": 12,
+        "avgResponseTime": 850
+      },
+      "createdAt": "2024-01-15T08:00:00Z"
+    },
+    {
+      "id": "2",
+      "name": "代码执行器",
+      "description": "安全的代码执行环境",
+      "type": "code",
+      "status": "active",
+      "provider": "sandbox",
+      "config": {
+        "timeout": 30,
+        "memoryLimit": "512MB",
+        "languages": ["python", "javascript", "bash"]
+      },
+      "usage": {
+        "calls": 890,
+        "errors": 45,
+        "avgResponseTime": 1200
+      },
+      "createdAt": "2024-01-16T09:30:00Z"
+    },
+    {
+      "id": "3",
+      "name": "文件处理器",
+      "description": "处理各种格式的文件",
+      "type": "file",
+      "status": "maintenance",
+      "provider": "internal",
+      "config": {
+        "maxFileSize": "10MB",
+        "supportedFormats": ["pdf", "docx", "xlsx", "csv"]
+      },
+      "usage": {
+        "calls": 456,
+        "errors": 8,
+        "avgResponseTime": 2100
+      },
+      "createdAt": "2024-01-17T14:20:00Z"
+    }
+  ]
+}

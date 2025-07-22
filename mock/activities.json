@@ -1,0 +1,57 @@
+{
+  "activities": [
+    {
+      "id": "1",
+      "type": "task_completed",
+      "message": "软件开发公司完成了UI设计任务",
+      "timestamp": "2024-01-20T14:30:00Z",
+      "companyId": "1",
+      "companyName": "软件开发公司",
+      "agentId": "1",
+      "agentName": "客服助手",
+      "metadata": {
+        "taskId": "task_123",
+        "taskName": "UI设计优化"
+      }
+    },
+    {
+      "id": "2",
+      "type": "agent_created",
+      "message": "新增了测试工程师Agent",
+      "timestamp": "2024-01-20T14:15:00Z",
+      "companyId": "1",
+      "companyName": "软件开发公司",
+      "agentId": "4",
+      "agentName": "测试工程师",
+      "metadata": {
+        "agentType": "测试型"
+      }
+    },
+    {
+      "id": "3",
+      "type": "project_started",
+      "message": "市场调研公司开始了新的调研项目",
+      "timestamp": "2024-01-20T13:30:00Z",
+      "companyId": "2",
+      "companyName": "市场调研公司",
+      "metadata": {
+        "projectId": "proj_456",
+        "projectName": "科技行业趋势分析"
+      }
+    },
+    {
+      "id": "4",
+      "type": "task_completed",
+      "message": "内容创作公司完成了文章撰写",
+      "timestamp": "2024-01-20T12:30:00Z",
+      "companyId": "3",
+      "companyName": "内容创作公司",
+      "agentId": "3",
+      "agentName": "文档助手",
+      "metadata": {
+        "taskId": "task_789",
+        "taskName": "品牌营销文案"
+      }
+    }
+  ]
+}
