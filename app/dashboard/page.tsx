@@ -1,23 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useWebSocket } from "@/contexts/WebSocketContext"
+import { companiesApi, dashboardApi } from "@/lib/api"
 import { motion } from "framer-motion"
-import { Building2, Bot, Activity, TrendingUp, Plus, Play, Settings, RefreshCw } from "lucide-react"
 import {
-  LineChart,
+  Activity,
+  Bot,
+  Building2,
+  Play,
+  Plus,
+  RefreshCw,
+  Settings,
+  TrendingUp,
+} from "lucide-react"
+import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import {
+  CartesianGrid,
+  Cell,
   Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts"
-import toast from "react-hot-toast"
 
 interface DashboardStats {
   totalCompanies: number
@@ -67,34 +77,35 @@ export default function DashboardPage() {
       setRefreshing(true)
 
       // 并行获取所有数据
-      const [statsRes, companiesRes, performanceRes] = await Promise.all([
-        fetch("/api/dashboard/stats"),
-        fetch("/api/companies?limit=3"),
-        fetch("/api/dashboard/performance"),
-      ])
+      const [statsResponse, companiesResponse, performanceResponse] =
+        await Promise.all([
+          dashboardApi.getStats(),
+          companiesApi.list({ limit: 3 }),
+          dashboardApi.getPerformance(),
+        ])
 
-      if (statsRes.ok) {
-        const statsData = await statsRes.json()
-        setStats(statsData.data)
+      // 处理统计数据响应 - DashboardResponse格式
+      if (statsResponse.success && statsResponse.data?.success) {
+        setStats(statsResponse.data.data as DashboardStats)
       }
 
-      if (companiesRes.ok) {
-        const companiesData = await companiesRes.json()
+      // 处理公司数据响应 - ApiResponse格式
+      if (companiesResponse.success && companiesResponse.data) {
         setCompanies(
-          companiesData.data.map((company: any) => ({
+          (companiesResponse.data || []).map((company: any) => ({
             id: company.id,
             name: company.name,
             agents: company.agents?.length || 0,
             status: company.status,
             progress: Math.floor(Math.random() * 100),
             currentProject: company.description || "暂无项目",
-          })),
+          }))
         )
       }
 
-      if (performanceRes.ok) {
-        const performanceData = await performanceRes.json()
-        setPerformance(performanceData.data)
+      // 处理性能数据响应 - DashboardResponse格式
+      if (performanceResponse.success && performanceResponse.data?.success) {
+        setPerformance(performanceResponse.data.data || [])
       }
     } catch (error) {
       console.error("获取仪表盘数据失败:", error)
@@ -147,24 +158,38 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">欢迎回来，{user?.name}！</h1>
-            <p className="text-gray-600 mt-2">管理您的AI公司，监控Agent协作进展</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              欢迎回来，{user?.name}！
+            </h1>
+            <p className="text-gray-600 mt-2">
+              管理您的AI公司，监控Agent协作进展
+            </p>
           </div>
           <div className="flex items-center space-x-3">
             <div
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                connected ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                connected
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
               }`}
             >
               <motion.div
-                className={`w-2 h-2 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`}
+                className={`w-2 h-2 rounded-full ${
+                  connected ? "bg-green-500" : "bg-red-500"
+                }`}
                 animate={{ scale: connected ? [1, 1.2, 1] : 1 }}
                 transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
               />
-              <span className="text-sm font-medium">{connected ? "已连接" : "未连接"}</span>
+              <span className="text-sm font-medium">
+                {connected ? "已连接" : "未连接"}
+              </span>
             </div>
 
             <motion.button
@@ -174,7 +199,11 @@ export default function DashboardPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <RefreshCw className={`w-5 h-5 text-gray-600 ${refreshing ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`w-5 h-5 text-gray-600 ${
+                  refreshing ? "animate-spin" : ""
+                }`}
+              />
             </motion.button>
 
             <motion.button
@@ -250,7 +279,9 @@ export default function DashboardPage() {
                   >
                     {stat.value}
                   </motion.p>
-                  <p className="text-sm text-green-600 mt-1">{stat.change} 本周</p>
+                  <p className="text-sm text-green-600 mt-1">
+                    {stat.change} 本周
+                  </p>
                 </div>
                 <motion.div
                   className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}
@@ -293,12 +324,19 @@ export default function DashboardPage() {
                   <XAxis
                     dataKey="timestamp"
                     tickFormatter={(value) =>
-                      new Date(value).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })
+                      new Date(value).toLocaleTimeString("zh-CN", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
                     }
                   />
                   <YAxis yAxisId="left" />
                   <YAxis yAxisId="right" orientation="right" />
-                  <Tooltip labelFormatter={(value) => new Date(value).toLocaleString("zh-CN")} />
+                  <Tooltip
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleString("zh-CN")
+                    }
+                  />
                   <Line
                     yAxisId="left"
                     type="monotone"
@@ -330,7 +368,9 @@ export default function DashboardPage() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div className="card">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Agent分布</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">
+              Agent分布
+            </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -361,10 +401,15 @@ export default function DashboardPage() {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
                     <span className="text-sm text-gray-700">{item.name}</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{item.value}</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {item.value}
+                  </span>
                 </motion.div>
               ))}
             </div>
@@ -400,14 +445,20 @@ export default function DashboardPage() {
                         <Building2 className="w-5 h-5 text-primary-600" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{company.name}</h4>
-                        <p className="text-sm text-gray-600">{company.agents} 个Agent</p>
+                        <h4 className="font-medium text-gray-900">
+                          {company.name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {company.agents} 个Agent
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          company.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                          company.status === "active"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
                         }`}
                       >
                         {company.status === "active" ? "活跃" : "空闲"}
@@ -435,7 +486,9 @@ export default function DashboardPage() {
                       />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700">{company.currentProject}</p>
+                  <p className="text-sm text-gray-700">
+                    {company.currentProject}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -489,18 +542,26 @@ export default function DashboardPage() {
                       activity.type === "task_completed"
                         ? "bg-green-100"
                         : activity.type === "agent_created"
-                          ? "bg-blue-100"
-                          : "bg-yellow-100"
+                        ? "bg-blue-100"
+                        : "bg-yellow-100"
                     }`}
                   >
-                    {activity.type === "task_completed" && <TrendingUp className="w-4 h-4 text-green-600" />}
-                    {activity.type === "agent_created" && <Bot className="w-4 h-4 text-blue-600" />}
-                    {activity.type === "project_started" && <Play className="w-4 h-4 text-yellow-600" />}
+                    {activity.type === "task_completed" && (
+                      <TrendingUp className="w-4 h-4 text-green-600" />
+                    )}
+                    {activity.type === "agent_created" && (
+                      <Bot className="w-4 h-4 text-blue-600" />
+                    )}
+                    {activity.type === "project_started" && (
+                      <Play className="w-4 h-4 text-yellow-600" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-900">{activity.message}</p>
                     <div className="flex items-center space-x-2 mt-1">
-                      <span className="text-xs text-gray-500">{activity.companyName}</span>
+                      <span className="text-xs text-gray-500">
+                        {activity.companyName}
+                      </span>
                       <span className="text-xs text-gray-400">•</span>
                       <span className="text-xs text-gray-500">
                         {new Date(activity.timestamp).toLocaleString("zh-CN")}

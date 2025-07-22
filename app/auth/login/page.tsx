@@ -2,12 +2,13 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
 import { useAuth } from "@/contexts/AuthContext"
-import { Bot, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react"
+import { authApi } from "@/lib/api"
+import { motion } from "framer-motion"
+import { ArrowRight, Bot, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import toast from "react-hot-toast"
 
 export default function LoginPage() {
@@ -48,20 +49,16 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
+      const response = await authApi.login({ email, password })
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (response.success) {
         // 保存用户信息和token
-        localStorage.setItem("token", data.data.token)
-        localStorage.setItem("refreshToken", data.data.refreshToken)
+        if (response.data?.token) {
+          localStorage.setItem("token", response.data.token)
+        }
+        if (response.data?.refresh_token) {
+          localStorage.setItem("refreshToken", response.data.refresh_token)
+        }
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true")
         }
@@ -73,7 +70,7 @@ export default function LoginPage() {
 
         router.push("/dashboard")
       } else {
-        toast.error(data.error?.message || "登录失败")
+        toast.error(response.error?.message || "登录失败")
       }
     } catch (error) {
       console.error("Login error:", error)
@@ -111,7 +108,9 @@ export default function LoginPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">欢迎回来</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                欢迎回来
+              </h2>
               <p className="text-gray-600">登录您的账户，继续管理您的AI公司</p>
             </motion.div>
           </div>
@@ -123,7 +122,9 @@ export default function LoginPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <h3 className="text-sm font-medium text-primary-800 mb-3">演示账户</h3>
+            <h3 className="text-sm font-medium text-primary-800 mb-3">
+              演示账户
+            </h3>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="text-xs text-primary-700">
@@ -161,7 +162,10 @@ export default function LoginPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 邮箱地址
               </label>
               <div className="relative">
@@ -184,7 +188,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 密码
               </label>
               <div className="relative">
@@ -229,13 +236,19 @@ export default function LoginPage() {
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded transition-colors"
                   disabled={isLoading}
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   记住我
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+                <a
+                  href="#"
+                  className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+                >
                   忘记密码？
                 </a>
               </div>
@@ -293,7 +306,9 @@ export default function LoginPage() {
                 <Bot className="w-12 h-12 text-white" />
               </motion.div>
               <h3 className="text-3xl font-bold mb-4">构建您的AI团队</h3>
-              <p className="text-xl text-primary-100 max-w-md">让智能Agent协作完成复杂项目，体验未来工作方式</p>
+              <p className="text-xl text-primary-100 max-w-md">
+                让智能Agent协作完成复杂项目，体验未来工作方式
+              </p>
             </div>
 
             {/* Floating Elements */}
@@ -306,12 +321,20 @@ export default function LoginPage() {
               <motion.div
                 className="absolute -bottom-10 -right-10 w-16 h-16 bg-white bg-opacity-10 rounded-full"
                 animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  delay: 1,
+                }}
               />
               <motion.div
                 className="absolute top-5 right-5 w-12 h-12 bg-white bg-opacity-10 rounded-full"
                 animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
+                transition={{
+                  duration: 2,
+                  repeat: Number.POSITIVE_INFINITY,
+                  delay: 0.5,
+                }}
               />
             </div>
           </motion.div>

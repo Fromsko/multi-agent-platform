@@ -2,19 +2,19 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { User, Camera, Save, Edit, Shield, Key, Bell } from "lucide-react"
-import { useAuth } from "@/contexts/AuthContext"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
+import { useAuth } from "@/contexts/AuthContext"
+import { motion } from "framer-motion"
+import { Bell, Camera, Edit, Key, Save, Shield, User } from "lucide-react"
+import { useState } from "react"
 import toast from "react-hot-toast"
 
 export default function ProfilePage() {
@@ -123,20 +123,33 @@ export default function ProfilePage() {
                 <div className="flex items-center space-x-6">
                   <div className="relative">
                     <Avatar className="h-24 w-24">
-                      <AvatarImage src={profileData.avatar || "/placeholder.svg"} />
-                      <AvatarFallback>{profileData.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage
+                        src={profileData.avatar || "/placeholder.svg"}
+                      />
+                      <AvatarFallback>
+                        {profileData.name.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
                     {isEditing && (
                       <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
                         <Camera className="h-4 w-4" />
-                        <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarChange}
+                          className="hidden"
+                        />
                       </label>
                     )}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">{profileData.name}</h3>
+                    <h3 className="text-lg font-semibold">
+                      {profileData.name}
+                    </h3>
                     <p className="text-gray-600">{profileData.email}</p>
-                    <p className="text-sm text-gray-500">加入时间: {new Date().toLocaleDateString()}</p>
+                    <p className="text-sm text-gray-500">
+                      加入时间: {new Date().toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
@@ -149,7 +162,12 @@ export default function ProfilePage() {
                     <Input
                       id="name"
                       value={profileData.name}
-                      onChange={(e) => setProfileData((prev) => ({ ...prev, name: e.target.value }))}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                       disabled={!isEditing}
                     />
                   </div>
@@ -159,7 +177,12 @@ export default function ProfilePage() {
                       id="email"
                       type="email"
                       value={profileData.email}
-                      onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
                       disabled={!isEditing}
                     />
                   </div>
@@ -168,7 +191,12 @@ export default function ProfilePage() {
                     <Input
                       id="phone"
                       value={profileData.phone}
-                      onChange={(e) => setProfileData((prev) => ({ ...prev, phone: e.target.value }))}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
                       disabled={!isEditing}
                       placeholder="输入电话号码"
                     />
@@ -178,7 +206,12 @@ export default function ProfilePage() {
                     <Input
                       id="location"
                       value={profileData.location}
-                      onChange={(e) => setProfileData((prev) => ({ ...prev, location: e.target.value }))}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          location: e.target.value,
+                        }))
+                      }
                       disabled={!isEditing}
                       placeholder="输入所在位置"
                     />
@@ -190,7 +223,12 @@ export default function ProfilePage() {
                   <Textarea
                     id="bio"
                     value={profileData.bio}
-                    onChange={(e) => setProfileData((prev) => ({ ...prev, bio: e.target.value }))}
+                    onChange={(e) =>
+                      setProfileData((prev) => ({
+                        ...prev,
+                        bio: e.target.value,
+                      }))
+                    }
                     disabled={!isEditing}
                     placeholder="介绍一下自己..."
                     rows={4}
@@ -200,7 +238,10 @@ export default function ProfilePage() {
                 <div className="flex justify-end space-x-2">
                   {isEditing ? (
                     <>
-                      <Button variant="outline" onClick={() => setIsEditing(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsEditing(false)}
+                      >
                         取消
                       </Button>
                       <Button onClick={handleProfileSave}>
@@ -234,7 +275,12 @@ export default function ProfilePage() {
                     id="currentPassword"
                     type="password"
                     value={securityData.currentPassword}
-                    onChange={(e) => setSecurityData((prev) => ({ ...prev, currentPassword: e.target.value }))}
+                    onChange={(e) =>
+                      setSecurityData((prev) => ({
+                        ...prev,
+                        currentPassword: e.target.value,
+                      }))
+                    }
                     placeholder="输入当前密码"
                   />
                 </div>
@@ -244,7 +290,12 @@ export default function ProfilePage() {
                     id="newPassword"
                     type="password"
                     value={securityData.newPassword}
-                    onChange={(e) => setSecurityData((prev) => ({ ...prev, newPassword: e.target.value }))}
+                    onChange={(e) =>
+                      setSecurityData((prev) => ({
+                        ...prev,
+                        newPassword: e.target.value,
+                      }))
+                    }
                     placeholder="输入新密码"
                   />
                 </div>
@@ -254,7 +305,12 @@ export default function ProfilePage() {
                     id="confirmPassword"
                     type="password"
                     value={securityData.confirmPassword}
-                    onChange={(e) => setSecurityData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                    onChange={(e) =>
+                      setSecurityData((prev) => ({
+                        ...prev,
+                        confirmPassword: e.target.value,
+                      }))
+                    }
                     placeholder="再次输入新密码"
                   />
                 </div>
@@ -273,7 +329,9 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">启用两步验证</h4>
-                    <p className="text-sm text-gray-600">为您的账户添加额外的安全保护</p>
+                    <p className="text-sm text-gray-600">
+                      为您的账户添加额外的安全保护
+                    </p>
                   </div>
                   <Switch />
                 </div>
@@ -287,11 +345,29 @@ export default function ProfilePage() {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { device: "Chrome on Windows", location: "北京, 中国", time: "2024-01-15 10:30", current: true },
-                    { device: "Safari on iPhone", location: "上海, 中国", time: "2024-01-14 15:20", current: false },
-                    { device: "Firefox on Mac", location: "深圳, 中国", time: "2024-01-13 09:15", current: false },
+                    {
+                      device: "Chrome on Windows",
+                      location: "北京, 中国",
+                      time: "2024-01-15 10:30",
+                      current: true,
+                    },
+                    {
+                      device: "Safari on iPhone",
+                      location: "上海, 中国",
+                      time: "2024-01-14 15:20",
+                      current: false,
+                    },
+                    {
+                      device: "Firefox on Mac",
+                      location: "深圳, 中国",
+                      time: "2024-01-13 09:15",
+                      current: false,
+                    },
                   ].map((session, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
                       <div>
                         <div className="font-medium">{session.device}</div>
                         <div className="text-sm text-gray-600">
@@ -300,7 +376,9 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         {session.current && (
-                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">当前会话</span>
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                            当前会话
+                          </span>
                         )}
                         {!session.current && (
                           <Button variant="outline" size="sm">
@@ -328,12 +406,17 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium">邮件通知</h4>
-                      <p className="text-sm text-gray-600">接收重要更新和活动通知</p>
+                      <p className="text-sm text-gray-600">
+                        接收重要更新和活动通知
+                      </p>
                     </div>
                     <Switch
                       checked={notificationSettings.emailNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationSettings((prev) => ({ ...prev, emailNotifications: checked }))
+                        setNotificationSettings((prev) => ({
+                          ...prev,
+                          emailNotifications: checked,
+                        }))
                       }
                     />
                   </div>
@@ -341,12 +424,17 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium">推送通知</h4>
-                      <p className="text-sm text-gray-600">在浏览器中接收实时通知</p>
+                      <p className="text-sm text-gray-600">
+                        在浏览器中接收实时通知
+                      </p>
                     </div>
                     <Switch
                       checked={notificationSettings.pushNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationSettings((prev) => ({ ...prev, pushNotifications: checked }))
+                        setNotificationSettings((prev) => ({
+                          ...prev,
+                          pushNotifications: checked,
+                        }))
                       }
                     />
                   </div>
@@ -359,7 +447,10 @@ export default function ProfilePage() {
                     <Switch
                       checked={notificationSettings.smsNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationSettings((prev) => ({ ...prev, smsNotifications: checked }))
+                        setNotificationSettings((prev) => ({
+                          ...prev,
+                          smsNotifications: checked,
+                        }))
                       }
                     />
                   </div>
@@ -367,12 +458,17 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium">营销邮件</h4>
-                      <p className="text-sm text-gray-600">接收产品更新和优惠信息</p>
+                      <p className="text-sm text-gray-600">
+                        接收产品更新和优惠信息
+                      </p>
                     </div>
                     <Switch
                       checked={notificationSettings.marketingEmails}
                       onCheckedChange={(checked) =>
-                        setNotificationSettings((prev) => ({ ...prev, marketingEmails: checked }))
+                        setNotificationSettings((prev) => ({
+                          ...prev,
+                          marketingEmails: checked,
+                        }))
                       }
                     />
                   </div>

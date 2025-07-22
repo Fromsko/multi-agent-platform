@@ -1,0 +1,482 @@
+openapi: 3.0.1
+info:
+  title: 多智能体平台 API
+  description: ''
+  version: 1.0.0
+tags:
+  - name: 认证
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: Register
+      deprecated: false
+      description: 用户注册
+      operationId: register_api_v1_auth_register_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                invite_code:
+                  type: string
+              required:
+                - email
+                - password
+                - username
+                - first_name
+                - last_name
+                - invite_code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/login:
+    post:
+      summary: Login
+      deprecated: false
+      description: 用户登录
+      operationId: login_api_v1_auth_login_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    success: true
+                    data:
+                      user:
+                        id: 2aa14dde-1303-452a-83a7-6de4c24efdf9
+                        email: emma.wilson@example.com
+                        username: emmaw23
+                        first_name: Emma
+                        last_name: Wilson
+                        full_name: Emma Wilson
+                        avatar: null
+                        role: user
+                        status: active
+                        profile: {}
+                        preferences: {}
+                        email_verified: false
+                        last_login_at: '2025-07-22T02:14:46'
+                        created_at: '2025-07-22T01:43:08'
+                        updated_at: '2025-07-22T02:14:46'
+                      token: >-
+                        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyYWExNGRkZS0xMzAzLTQ1MmEtODNhNy02ZGU0YzI0ZWZkZjkiLCJlbWFpbCI6ImVtbWEud2lsc29uQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJlbW1hdzIzIiwicm9sZSI6InVzZXIiLCJleHAiOjE3NTMyMzY4ODUsImp0aSI6Ino5Z0lSNEg1Nm5Ka0xiNTZ0UG1TelhIalJPR3V3VElJRzVacXZJM1Ayd2sifQ.jrz3oZOzgNCo4NR3vSTxsr13HxMM6wBI8NUquKLKMpE
+                      refresh_token: >-
+                        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyYWExNGRkZS0xMzAzLTQ1MmEtODNhNy02ZGU0YzI0ZWZkZjkiLCJleHAiOjE3NTM3NTUyODUsInR5cGUiOiJyZWZyZXNoIiwianRpIjoiWk1Fb1dUaXAxZXBMN0t4QzJMSUNEZyJ9.-TQBpSDJgF3TpWU9La1lEXU0jApufOpN6tszr9St718
+                      expires_in: 86400
+                    message: Login successful
+                '2':
+                  summary: 异常示例
+                  value:
+                    success: false
+                    error:
+                      code: HTTP_401
+                      message: Incorrect email or password
+                      timestamp: 1753150500.036405
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/refresh:
+    post:
+      summary: Refresh Token
+      deprecated: false
+      description: 刷新访问令牌
+      operationId: refresh_token_api_v1_auth_refresh_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/logout:
+    post:
+      summary: Logout
+      deprecated: false
+      description: 用户登出
+      operationId: logout_api_v1_auth_logout_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogout'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Forgot Password
+      deprecated: false
+      description: 忘记密码
+      operationId: forgot_password_api_v1_auth_forgot_password_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/reset-password:
+    post:
+      summary: Reset Password
+      deprecated: false
+      description: 重置密码
+      operationId: reset_password_api_v1_auth_reset_password_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/change-password:
+    post:
+      summary: Change Password
+      deprecated: false
+      description: 修改密码
+      operationId: change_password_api_v1_auth_change_password_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/verify-email:
+    post:
+      summary: Verify Email
+      deprecated: false
+      description: 验证邮箱
+      operationId: verify_email_api_v1_auth_verify_email_post
+      tags:
+        - 认证
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmail'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/auth/me:
+    get:
+      summary: Get Current User Info
+      deprecated: false
+      description: 获取当前用户信息
+      operationId: get_current_user_info_api_v1_auth_me_get
+      tags:
+        - 认证
+      parameters: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          headers: {}
+      security:
+        - bearer: []
+components:
+  schemas:
+    AuthResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        data:
+          additionalProperties: true
+          type: object
+          title: Data
+          properties: {}
+        message:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Message
+      type: object
+      required:
+        - success
+        - data
+      title: AuthResponse
+    ChangePassword:
+      properties:
+        current_password:
+          type: string
+          title: Current Password
+        new_password:
+          type: string
+          title: New Password
+      type: object
+      required:
+        - current_password
+        - new_password
+      title: ChangePassword
+    ForgotPassword:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+        - email
+      title: ForgotPassword
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResetPassword:
+      properties:
+        token:
+          type: string
+          title: Token
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+        - token
+        - password
+      title: ResetPassword
+    TokenRefresh:
+      properties:
+        refresh_token:
+          type: string
+          title: Refresh Token
+      type: object
+      required:
+        - refresh_token
+      title: TokenRefresh
+    UserLogin:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        remember_me:
+          type: boolean
+          title: Remember Me
+          default: false
+        device_info:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Device Info
+      type: object
+      required:
+        - email
+        - password
+      title: UserLogin
+    UserLogout:
+      properties:
+        refresh_token:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Refresh Token
+        all_devices:
+          type: boolean
+          title: All Devices
+          default: false
+      type: object
+      title: UserLogout
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+    VerifyEmail:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+        - token
+      title: VerifyEmail
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+servers:
+  - url: http://localhost:8000
+    description: 测试环境
+security:
+  - bearer: []

@@ -1,18 +1,38 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft, Save, Trash2, Users, Settings, Shield, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 import { mockDataStore, type Company } from "@/lib/mock-data"
+import {
+  ArrowLeft,
+  Bell,
+  Save,
+  Settings,
+  Shield,
+  Trash2,
+  Users,
+} from "lucide-react"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 
 export default function CompanySettingsPage() {
@@ -40,26 +60,43 @@ export default function CompanySettingsPage() {
   useEffect(() => {
     const companies = mockDataStore.getCompanies()
     const foundCompany = companies.find((c) => c.id === params.id)
-    if (foundCompany) {
-      setCompany(foundCompany)
-      setSettings({
-        name: foundCompany.name,
-        description: foundCompany.description || "",
-        type: foundCompany.type || "",
-        industry: foundCompany.industry || "",
-        autoStart: foundCompany.settings?.autoStart || false,
-        maxAgents: foundCompany.settings?.maxAgents || 5,
-        maxTools: foundCompany.settings?.maxTools || 10,
-        notifyOnCompletion: foundCompany.settings?.notifyOnCompletion || true,
-        apiRateLimit: foundCompany.settings?.apiRateLimit || 100,
-        memorySize: foundCompany.settings?.memorySize || 10,
-        visibility: foundCompany.settings?.visibility || "private",
-        webhookUrl: foundCompany.settings?.webhookUrl || "",
-        slackChannel: foundCompany.settings?.slackChannel || "",
-        emailNotifications: foundCompany.settings?.emailNotifications || true,
-        smsNotifications: foundCompany.settings?.smsNotifications || false,
-      })
+
+    if (!foundCompany) {
+      return
     }
+
+    setCompany(foundCompany)
+
+    // 从公司配置中提取设置,使用默认值兜底
+    // 使用类型断言来访问可选的settings属性
+    const { settings: companySettings = {}, ...companyInfo } =
+      foundCompany as Company & { settings?: Record<string, any> }
+
+    setSettings({
+      // 基本信息
+      name: companyInfo.name,
+      description: companyInfo.description ?? "",
+      type: companyInfo.type ?? "",
+      // 由于Company类型中不存在industry字段,这里使用类型断言来访问可选的industry属性
+      industry: (companyInfo as any).industry ?? "",
+
+      // Agent相关配置
+      autoStart: companySettings.autoStart ?? false,
+      maxAgents: companySettings.maxAgents ?? 5,
+      maxTools: companySettings.maxTools ?? 10,
+
+      // 系统配置
+      apiRateLimit: companySettings.apiRateLimit ?? 100,
+      memorySize: companySettings.memorySize ?? 10,
+      visibility: companySettings.visibility ?? "private",
+
+      // 通知配置
+      notifyOnCompletion: companySettings.notifyOnCompletion ?? true,
+      webhookUrl: companySettings.webhookUrl ?? "",
+      slackChannel: companySettings.slackChannel ?? "",
+      emailNotifications: companySettings.emailNotifications ?? true,
+      smsNotifications: companySettings.smsNotifications ?? false,
+    })
   }, [params.id])
 
   const handleSave = () => {
@@ -120,7 +157,10 @@ export default function CompanySettingsPage() {
       {/* 头部 */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" onClick={() => router.push(`/dashboard/companies/${company.id}`)}>
+          <Button
+            variant="ghost"
+            onClick={() => router.push(`/dashboard/companies/${company.id}`)}
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             返回
           </Button>
@@ -176,12 +216,19 @@ export default function CompanySettingsPage() {
                   <Input
                     id="name"
                     value={settings.name}
-                    onChange={(e) => setSettings({ ...settings, name: e.target.value })}
+                    onChange={(e) =>
+                      setSettings({ ...settings, name: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="type">公司类型</Label>
-                  <Select value={settings.type} onValueChange={(value) => setSettings({ ...settings, type: value })}>
+                  <Select
+                    value={settings.type}
+                    onValueChange={(value) =>
+                      setSettings({ ...settings, type: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="选择类型" />
                     </SelectTrigger>
@@ -201,7 +248,9 @@ export default function CompanySettingsPage() {
                 <Textarea
                   id="description"
                   value={settings.description}
-                  onChange={(e) => setSettings({ ...settings, description: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, description: e.target.value })
+                  }
                   rows={3}
                 />
               </div>
@@ -210,7 +259,9 @@ export default function CompanySettingsPage() {
                 <Label htmlFor="industry">所属行业</Label>
                 <Select
                   value={settings.industry}
-                  onValueChange={(value) => setSettings({ ...settings, industry: value })}
+                  onValueChange={(value) =>
+                    setSettings({ ...settings, industry: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="选择行业" />
@@ -238,11 +289,15 @@ export default function CompanySettingsPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>自动启动</Label>
-                  <p className="text-sm text-gray-500">创建后自动启动公司运营</p>
+                  <p className="text-sm text-gray-500">
+                    创建后自动启动公司运营
+                  </p>
                 </div>
                 <Switch
                   checked={settings.autoStart}
-                  onCheckedChange={(checked) => setSettings({ ...settings, autoStart: checked })}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, autoStart: checked })
+                  }
                 />
               </div>
 
@@ -255,7 +310,12 @@ export default function CompanySettingsPage() {
                     id="memorySize"
                     type="number"
                     value={settings.memorySize}
-                    onChange={(e) => setSettings({ ...settings, memorySize: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        memorySize: Number(e.target.value),
+                      })
+                    }
                     min={1}
                     max={100}
                   />
@@ -266,7 +326,12 @@ export default function CompanySettingsPage() {
                     id="apiRateLimit"
                     type="number"
                     value={settings.apiRateLimit}
-                    onChange={(e) => setSettings({ ...settings, apiRateLimit: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        apiRateLimit: Number(e.target.value),
+                      })
+                    }
                     min={10}
                     max={1000}
                   />
@@ -277,13 +342,17 @@ export default function CompanySettingsPage() {
                 <Label htmlFor="visibility">可见性</Label>
                 <Select
                   value={settings.visibility}
-                  onValueChange={(value) => setSettings({ ...settings, visibility: value })}
+                  onValueChange={(value) =>
+                    setSettings({ ...settings, visibility: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="private">私有（仅创建者可见）</SelectItem>
+                    <SelectItem value="private">
+                      私有（仅创建者可见）
+                    </SelectItem>
                     <SelectItem value="team">团队（团队成员可见）</SelectItem>
                     <SelectItem value="public">公开（所有人可见）</SelectItem>
                   </SelectContent>
@@ -308,7 +377,12 @@ export default function CompanySettingsPage() {
                     id="maxAgents"
                     type="number"
                     value={settings.maxAgents}
-                    onChange={(e) => setSettings({ ...settings, maxAgents: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        maxAgents: Number(e.target.value),
+                      })
+                    }
                     min={1}
                     max={20}
                   />
@@ -322,12 +396,18 @@ export default function CompanySettingsPage() {
                     id="maxTools"
                     type="number"
                     value={settings.maxTools}
-                    onChange={(e) => setSettings({ ...settings, maxTools: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        maxTools: Number(e.target.value),
+                      })
+                    }
                     min={1}
                     max={50}
                   />
                   <p className="text-xs text-gray-500">
-                    当前使用: {company.tools || 0} / {settings.maxTools}
+                    当前使用: {(company as any).tools ?? 0} /{" "}
+                    {settings.maxTools}
                   </p>
                 </div>
               </div>
@@ -348,10 +428,14 @@ export default function CompanySettingsPage() {
                 <Input
                   id="webhookUrl"
                   value={settings.webhookUrl}
-                  onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, webhookUrl: e.target.value })
+                  }
                   placeholder="https://your-webhook-url.com"
                 />
-                <p className="text-xs text-gray-500">用于接收公司状态变更通知</p>
+                <p className="text-xs text-gray-500">
+                  用于接收公司状态变更通知
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -372,7 +456,9 @@ export default function CompanySettingsPage() {
                 </div>
                 <Switch
                   checked={settings.notifyOnCompletion}
-                  onCheckedChange={(checked) => setSettings({ ...settings, notifyOnCompletion: checked })}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, notifyOnCompletion: checked })
+                  }
                 />
               </div>
 
@@ -385,7 +471,9 @@ export default function CompanySettingsPage() {
                 </div>
                 <Switch
                   checked={settings.emailNotifications}
-                  onCheckedChange={(checked) => setSettings({ ...settings, emailNotifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, emailNotifications: checked })
+                  }
                 />
               </div>
 
@@ -396,7 +484,9 @@ export default function CompanySettingsPage() {
                 </div>
                 <Switch
                   checked={settings.smsNotifications}
-                  onCheckedChange={(checked) => setSettings({ ...settings, smsNotifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setSettings({ ...settings, smsNotifications: checked })
+                  }
                 />
               </div>
 
@@ -407,10 +497,14 @@ export default function CompanySettingsPage() {
                 <Input
                   id="slackChannel"
                   value={settings.slackChannel}
-                  onChange={(e) => setSettings({ ...settings, slackChannel: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, slackChannel: e.target.value })
+                  }
                   placeholder="#general"
                 />
-                <p className="text-xs text-gray-500">发送通知到指定的Slack频道</p>
+                <p className="text-xs text-gray-500">
+                  发送通知到指定的Slack频道
+                </p>
               </div>
             </CardContent>
           </Card>

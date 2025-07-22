@@ -2,24 +2,51 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Plus, MessageSquare, Star, Copy, Trash2, Edit, MoreHorizontal, Play } from "lucide-react"
-import { useAppStore } from "@/stores/useAppStore"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
+import { useAppStore } from "@/stores/useAppStore"
+import { motion } from "framer-motion"
+import {
+  Copy,
+  Edit,
+  MessageSquare,
+  MoreHorizontal,
+  Play,
+  Plus,
+  Star,
+  Trash2,
+} from "lucide-react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 export default function PromptsPage() {
-  const { prompts, loadPrompts, createPrompt, updatePrompt, deletePrompt } = useAppStore()
+  const { prompts, loadPrompts, createPrompt, updatePrompt, deletePrompt } =
+    useAppStore()
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [editingPrompt, setEditingPrompt] = useState<any>(null)
   const [testingPrompt, setTestingPrompt] = useState<any>(null)
@@ -92,7 +119,7 @@ export default function PromptsPage() {
     // Simulate prompt testing
     setTimeout(() => {
       setTestResult(
-        `测试结果：提示词 "${prompt.name}" 执行成功！\n\n生成的内容示例：\n这是一个基于您的提示词生成的示例响应。提示词的质量很好，建议的改进点包括：\n1. 可以增加更多的上下文信息\n2. 考虑添加输出格式的约束\n3. 可以优化变量的使用方式`,
+        `测试结果：提示词 "${prompt.name}" 执行成功！\n\n生成的内容示例：\n这是一个基于您的提示词生成的示例响应。提示词的质量很好，建议的改进点包括：\n1. 可以增加更多的上下文信息\n2. 考虑添加输出格式的约束\n3. 可以优化变量的使用方式`
       )
     }, 2000)
   }
@@ -131,7 +158,12 @@ export default function PromptsPage() {
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }).map((_, index) => (
-      <Star key={index} className={`h-4 w-4 ${index < rating ? "text-yellow-400 fill-current" : "text-gray-300"}`} />
+      <Star
+        key={index}
+        className={`h-4 w-4 ${
+          index < rating ? "text-yellow-400 fill-current" : "text-gray-300"
+        }`}
+      />
     ))
   }
 
@@ -157,7 +189,9 @@ export default function PromptsPage() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[700px]">
             <DialogHeader>
-              <DialogTitle>{editingPrompt ? "编辑提示词" : "创建提示词"}</DialogTitle>
+              <DialogTitle>
+                {editingPrompt ? "编辑提示词" : "创建提示词"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -166,7 +200,9 @@ export default function PromptsPage() {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
                     placeholder="输入提示词名称"
                     required
                   />
@@ -175,7 +211,9 @@ export default function PromptsPage() {
                   <Label htmlFor="category">分类</Label>
                   <Select
                     value={formData.category}
-                    onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, category: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="选择分类" />
@@ -195,7 +233,12 @@ export default function PromptsPage() {
                 <Input
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="输入提示词描述"
                   required
                 />
@@ -212,7 +255,9 @@ export default function PromptsPage() {
                 />
                 {formData.variables.length > 0 && (
                   <div className="mt-2">
-                    <Label className="text-sm text-gray-600">检测到的变量:</Label>
+                    <Label className="text-sm text-gray-600">
+                      检测到的变量:
+                    </Label>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {formData.variables.map((variable, index) => (
                         <Badge key={index} variant="outline">
@@ -224,7 +269,11 @@ export default function PromptsPage() {
                 )}
               </div>
               <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={() => setShowCreateDialog(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowCreateDialog(false)}
+                >
                   取消
                 </Button>
                 <Button type="submit">{editingPrompt ? "更新" : "创建"}</Button>
@@ -265,7 +314,9 @@ export default function PromptsPage() {
                       <Play className="h-4 w-4 mr-2" />
                       测试
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => copyToClipboard(prompt.content)}>
+                    <DropdownMenuItem
+                      onClick={() => copyToClipboard(prompt.content)}
+                    >
                       <Copy className="h-4 w-4 mr-2" />
                       复制
                     </DropdownMenuItem>
@@ -273,7 +324,10 @@ export default function PromptsPage() {
                       <Edit className="h-4 w-4 mr-2" />
                       编辑
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleDelete(prompt.id)} className="text-red-600">
+                    <DropdownMenuItem
+                      onClick={() => handleDelete(prompt.id)}
+                      className="text-red-600"
+                    >
                       <Trash2 className="h-4 w-4 mr-2" />
                       删除
                     </DropdownMenuItem>
@@ -282,20 +336,32 @@ export default function PromptsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Badge className={getCategoryColor(prompt.category)}>{prompt.category}</Badge>
-                  <div className="flex items-center">{renderStars(prompt.rating)}</div>
+                  <Badge className={getCategoryColor(prompt.category)}>
+                    {prompt.category}
+                  </Badge>
+                  <div className="flex items-center">
+                    {renderStars(prompt.rating)}
+                  </div>
                 </div>
 
-                <p className="text-sm text-gray-600 line-clamp-2">{prompt.description}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {prompt.description}
+                </p>
 
-                <div className="bg-gray-50 p-3 rounded text-sm font-mono line-clamp-4">{prompt.content}</div>
+                <div className="bg-gray-50 p-3 rounded text-sm font-mono line-clamp-4">
+                  {prompt.content}
+                </div>
 
                 {prompt.variables.length > 0 && (
                   <div>
                     <Label className="text-xs text-gray-500">变量:</Label>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {prompt.variables.map((variable, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {variable}
                         </Badge>
                       ))}
@@ -331,7 +397,10 @@ export default function PromptsPage() {
       )}
 
       {/* Test Dialog */}
-      <Dialog open={!!testingPrompt} onOpenChange={() => setTestingPrompt(null)}>
+      <Dialog
+        open={!!testingPrompt}
+        onOpenChange={() => setTestingPrompt(null)}
+      >
         <DialogContent className="sm:max-w-[800px]">
           <DialogHeader>
             <DialogTitle>测试提示词: {testingPrompt?.name}</DialogTitle>
@@ -344,22 +413,32 @@ export default function PromptsPage() {
             <TabsContent value="test" className="space-y-4">
               <div>
                 <Label>原始提示词</Label>
-                <Textarea value={testingPrompt?.content || ""} readOnly rows={6} className="bg-gray-50" />
+                <Textarea
+                  value={testingPrompt?.content || ""}
+                  readOnly
+                  rows={6}
+                  className="bg-gray-50"
+                />
               </div>
               {testingPrompt?.variables.length > 0 && (
                 <div>
                   <Label>变量值</Label>
                   <div className="space-y-2">
-                    {testingPrompt.variables.map((variable: string, index: number) => (
-                      <div key={index}>
-                        <Label className="text-sm">{variable}</Label>
-                        <Input placeholder={`输入 ${variable} 的值`} />
-                      </div>
-                    ))}
+                    {testingPrompt.variables.map(
+                      (variable: string, index: number) => (
+                        <div key={index}>
+                          <Label className="text-sm">{variable}</Label>
+                          <Input placeholder={`输入 ${variable} 的值`} />
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               )}
-              <Button onClick={() => handleTest(testingPrompt)} className="w-full">
+              <Button
+                onClick={() => handleTest(testingPrompt)}
+                className="w-full"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 运行测试
               </Button>
@@ -367,10 +446,18 @@ export default function PromptsPage() {
             <TabsContent value="result" className="space-y-4">
               <div>
                 <Label>测试结果</Label>
-                <Textarea value={testResult} readOnly rows={12} className="bg-gray-50" />
+                <Textarea
+                  value={testResult}
+                  readOnly
+                  rows={12}
+                  className="bg-gray-50"
+                />
               </div>
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => copyToClipboard(testResult)}>
+                <Button
+                  variant="outline"
+                  onClick={() => copyToClipboard(testResult)}
+                >
                   <Copy className="h-4 w-4 mr-2" />
                   复制结果
                 </Button>

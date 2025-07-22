@@ -35,7 +35,7 @@ export interface AuthResponse {
     updated_at: string
   }
   token: string
-  refreshToken: string
+  refresh_token: string
   expires_in: number
 }
 

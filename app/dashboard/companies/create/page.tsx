@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { CompanyWizard } from "@/components/common/CompanyWizard"
 import { mockDataStore } from "@/lib/mock-data"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from "react-hot-toast"
 
 export default function CreateCompanyPage() {
@@ -40,7 +40,10 @@ export default function CreateCompanyPage() {
 
       // 保存到mock数据
       const companies = mockDataStore.getCompanies()
-      companies.push(newCompany)
+      companies.push({
+        ...newCompany,
+        status: newCompany.status as "active" | "idle" | "maintenance",
+      })
 
       toast.success("公司创建成功！")
 

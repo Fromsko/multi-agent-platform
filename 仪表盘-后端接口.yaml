@@ -1,0 +1,222 @@
+openapi: 3.0.1
+info:
+  title: 多智能体平台 API
+  description: ''
+  version: 1.0.0
+tags:
+  - name: 仪表盘
+paths:
+  /api/v1/dashboard/stats:
+    get:
+      summary: Get Dashboard Stats
+      deprecated: false
+      description: 获取仪表盘统计数据
+      operationId: get_dashboard_stats_api_v1_dashboard_stats_get
+      tags:
+        - 仪表盘
+      parameters:
+        - name: period
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            pattern: ^(today|week|month|year)$
+            default: week
+            title: Period
+        - name: companyId
+          in: query
+          description: ''
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Companyid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/dashboard/performance:
+    get:
+      summary: Get Performance Data
+      deprecated: false
+      description: 获取性能数据
+      operationId: get_performance_data_api_v1_dashboard_performance_get
+      tags:
+        - 仪表盘
+      parameters:
+        - name: period
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            pattern: ^(hour|day|week|month)$
+            default: day
+            title: Period
+        - name: metrics
+          in: query
+          description: ''
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Metrics
+        - name: companyId
+          in: query
+          description: ''
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: Companyid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/dashboard/alerts:
+    get:
+      summary: Get System Alerts
+      deprecated: false
+      description: 获取系统告警
+      operationId: get_system_alerts_api_v1_dashboard_alerts_get
+      tags:
+        - 仪表盘
+      parameters:
+        - name: severity
+          in: query
+          description: ''
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                pattern: ^(low|medium|high|critical)$
+              - type: 'null'
+            title: Severity
+        - name: status
+          in: query
+          description: ''
+          required: false
+          schema:
+            anyOf:
+              - type: string
+                pattern: ^(active|resolved|acknowledged)$
+              - type: 'null'
+            title: Status
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+            maximum: 100
+            minimum: 1
+            default: 20
+            title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+      security:
+        - bearer: []
+components:
+  schemas:
+    DashboardResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        data:
+          additionalProperties: true
+          type: object
+          title: Data
+          properties: {}
+        meta:
+          anyOf:
+            - additionalProperties: true
+              type: object
+              properties: {}
+            - type: 'null'
+          title: Meta
+      type: object
+      required:
+        - success
+        - data
+      title: DashboardResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+servers: []
+security:
+  - bearer: []

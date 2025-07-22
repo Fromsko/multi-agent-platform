@@ -1,8 +1,9 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { authApi } from "@/lib/api"
 import { useRouter } from "next/navigation"
+import type React from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 interface User {
@@ -49,81 +50,103 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setLoading(true)
 
-      // 检查默认管理员账户
-      const defaultAdminEmail = process.env.NEXT_PUBLIC_DEFAULT_ADMIN_EMAIL || "admin@gmail.com"
-      const defaultAdminPassword = process.env.NEXT_PUBLIC_DEFAULT_ADMIN_PASSWORD || "admin"
+      const response = await authApi.login({ email, password })
 
-      if (email === defaultAdminEmail && password === defaultAdminPassword) {
-        const adminUser: User = {
-          id: "admin",
-          email: defaultAdminEmail,
-          name: "系统管理员",
-          role: "admin",
-          avatar: "👨‍💼",
-          createdAt: new Date().toISOString(),
+      if (response.success && response.data) {
+        const userData = response.data.user
+        const user: User = {
+          id: userData.id,
+          email: userData.email,
+          name:
+            userData.full_name ||
+            userData.username ||
+            `${userData.first_name} ${userData.last_name}`,
+          role: userData.role as "user" | "admin",
+          avatar: userData.avatar,
+          createdAt: userData.created_at,
           profile: {
-            company: "AgentCorp",
-            position: "系统管理员",
-            bio: "负责平台的整体管理和维护",
+            phone: userData.profile?.phone,
+            company: userData.profile?.company,
+            position: userData.profile?.position,
+            bio: userData.profile?.bio,
           },
         }
-        setUser(adminUser)
-        localStorage.setItem("user", JSON.stringify(adminUser))
-        toast.success("管理员登录成功！")
-        return true
-      }
 
-      // 模拟其他用户登录
-      if (email === "user@example.com" && password === "user123") {
-        const normalUser: User = {
-          id: "2",
-          email: "user@example.com",
-          name: "普通用户",
-          role: "user",
-          avatar: "👤",
-          createdAt: new Date().toISOString(),
-          profile: {
-            company: "示例公司",
-            position: "产品经理",
-          },
-        }
-        setUser(normalUser)
-        localStorage.setItem("user", JSON.stringify(normalUser))
+        setUser(user)
+        localStorage.setItem("user", JSON.stringify(user))
+
+        // Token已在登录页面保存，这里不需要重复保存
         toast.success("登录成功！")
         return true
+      } else {
+        toast.error(response.error?.message || "登录失败")
+        return false
       }
-
-      toast.error("邮箱或密码错误")
-      return false
     } catch (error) {
-      toast.error("登录失败，请重试")
+      console.error("Login error:", error)
+      toast.error("网络错误，请稍后重试")
       return false
     } finally {
       setLoading(false)
     }
   }
 
-  const register = async (email: string, password: string, name: string): Promise<boolean> => {
+  const register = async (
+    email: string,
+    password: string,
+    name: string
+  ): Promise<boolean> => {
     try {
       setLoading(true)
 
-      // 模拟注册逻辑
-      const newUser: User = {
-        id: Date.now().toString(),
+      const response = await authApi.register({
         email,
-        name,
-        role: "user",
-        avatar: "👤",
-        createdAt: new Date().toISOString(),
-        profile: {},
-      }
+        password,
+        username: name,
+        first_name: name,
+        last_name: name,
+      })
 
-      setUser(newUser)
-      localStorage.setItem("user", JSON.stringify(newUser))
-      toast.success("注册成功！")
-      return true
+      if (response.success && response.data) {
+        const userData = response.data.user
+        const user: User = {
+          id: userData.id,
+          email: userData.email,
+          name:
+            userData.full_name ||
+            userData.username ||
+            `${userData.first_name} ${userData.last_name}`,
+          role: userData.role as "user" | "admin",
+          avatar: userData.avatar,
+          createdAt: userData.created_at,
+          profile: {
+            phone: userData.profile?.phone,
+            company: userData.profile?.company,
+            position: userData.profile?.position,
+            bio: userData.profile?.bio,
+          },
+        }
+
+        setUser(user)
+        localStorage.setItem("user", JSON.stringify(user))
+
+        // 保存token
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token)
+        }
+        if (response.data.refresh_token) {
+          localStorage.setItem("refreshToken", response.data.refresh_token)
+        }
+
+        toast.success("注册成功！")
+        return true
+      } else {
+        toast.error(response.error?.message || "注册失败")
+        return false
+      }
     } catch (error) {
-      toast.error("注册失败，请重试")
+      console.error("Register error:", error)
+      toast.error("网络错误，请稍后重试")
       return false
     } finally {
       setLoading(false)
@@ -149,12 +172,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
     localStorage.removeItem("user")
     localStorage.removeItem("token")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("rememberMe")
     toast.success("已退出登录")
     router.push("/auth/login")
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, updateProfile, loading }}
+    >
       {children}
     </AuthContext.Provider>
   )

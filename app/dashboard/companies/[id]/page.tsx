@@ -1,20 +1,36 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { ArrowLeft, Play, Pause, Settings, Users, Activity, Code, Download, Share } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SplitLayout } from "@/components/common/SplitLayout"
 import { ChatInterface, type Message } from "@/components/common/ChatInterface"
 import { CodeEditor } from "@/components/common/CodeEditor"
-import { mockDataStore, type Company } from "@/lib/mock-data"
-import { toast } from "react-hot-toast"
+import { SplitLayout } from "@/components/common/SplitLayout"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WorkflowEditor } from "@/components/ui/workflow/workflow-editor"
-import type { Node, Edge } from "reactflow"
+import { mockDataStore, type Company } from "@/lib/mock-data"
+import { motion } from "framer-motion"
+import {
+  Activity,
+  ArrowLeft,
+  Code,
+  Download,
+  Pause,
+  Play,
+  Settings,
+  Share,
+  Users,
+} from "lucide-react"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast"
+import type { Edge, Node } from "reactflow"
 
 export default function CompanyDetailPage() {
   const params = useParams()
@@ -46,9 +62,9 @@ export default function CompanyDetailPage() {
       ])
 
       // 初始化工作流
-      if (foundCompany.workflow) {
-        setNodes(foundCompany.workflow.nodes || [])
-        setEdges(foundCompany.workflow.edges || [])
+      if ("workflow" in foundCompany && foundCompany.workflow) {
+        setNodes((foundCompany.workflow as any)?.nodes || [])
+        setEdges((foundCompany.workflow as any)?.edges || [])
       } else {
         // 创建默认工作流
         const defaultNodes: Node[] = [
@@ -161,7 +177,10 @@ export default function CompanyDetailPage() {
       setMessages((prev) => [...prev, aiMessage])
 
       // 模拟生成代码
-      if (content.toLowerCase().includes("代码") || content.toLowerCase().includes("html")) {
+      if (
+        content.toLowerCase().includes("代码") ||
+        content.toLowerCase().includes("html")
+      ) {
         setTimeout(() => {
           const sampleCode = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -246,7 +265,11 @@ export default function CompanyDetailPage() {
       {/* 公司信息头部 */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
-          <Button variant="ghost" size="sm" onClick={() => router.push("/dashboard/companies")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/dashboard/companies")}
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             返回
           </Button>
@@ -254,7 +277,9 @@ export default function CompanyDetailPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => router.push(`/dashboard/companies/${company.id}/settings`)}
+              onClick={() =>
+                router.push(`/dashboard/companies/${company.id}/settings`)
+              }
             >
               <Settings className="h-4 w-4" />
             </Button>
@@ -283,14 +308,22 @@ export default function CompanyDetailPage() {
             <Users className="w-6 h-6 text-primary-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">{company.name}</h1>
+            <h1 className="text-xl font-semibold text-gray-900">
+              {company.name}
+            </h1>
             <div className="flex items-center space-x-2 mt-1">
               <Badge
-                className={company.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}
+                className={
+                  company.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-100 text-gray-800"
+                }
               >
                 {company.status === "active" ? "运行中" : "已暂停"}
               </Badge>
-              <span className="text-sm text-gray-600">{company.agents} 个Agent</span>
+              <span className="text-sm text-gray-600">
+                {company.agents} 个Agent
+              </span>
             </div>
           </div>
         </div>
@@ -340,7 +373,10 @@ export default function CompanyDetailPage() {
       {/* 右侧头部 */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+          <Tabs
+            value={activeTab}
+            onValueChange={(value) => setActiveTab(value as any)}
+          >
             <TabsList>
               <TabsTrigger value="output" className="flex items-center">
                 <Code className="h-4 w-4 mr-2" />
@@ -387,8 +423,12 @@ export default function CompanyDetailPage() {
               <div className="h-full flex items-center justify-center text-gray-500">
                 <div className="text-center">
                   <Code className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">等待生成内容</h3>
-                  <p className="text-gray-600">向AI发送指令开始生成代码或内容</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    等待生成内容
+                  </h3>
+                  <p className="text-gray-600">
+                    向AI发送指令开始生成代码或内容
+                  </p>
                 </div>
               </div>
             )}
@@ -400,18 +440,26 @@ export default function CompanyDetailPage() {
               <div className="grid grid-cols-2 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">完成任务</CardTitle>
+                    <CardTitle className="text-sm font-medium text-gray-600">
+                      完成任务
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-green-600">{company.tasks.completed}</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      {company.tasks.completed}
+                    </div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">进行中</CardTitle>
+                    <CardTitle className="text-sm font-medium text-gray-600">
+                      进行中
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">{company.tasks.inProgress}</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      {company.tasks.inProgress}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -419,7 +467,9 @@ export default function CompanyDetailPage() {
               {/* 进度条 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">当前项目进度</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    当前项目进度
+                  </CardTitle>
                   <CardDescription>{company.currentProject}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -443,22 +493,43 @@ export default function CompanyDetailPage() {
               {/* Agent状态 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Agent状态</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Agent状态
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {company.agentDetails?.map((agent, index) => (
-                      <div key={agent.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-2 h-2 rounded-full ${isRunning ? "bg-green-500" : "bg-gray-400"}`} />
-                          <div>
-                            <h4 className="font-medium text-gray-900">{agent.name}</h4>
-                            <p className="text-sm text-gray-600">{agent.type}</p>
+                    {company.agents && Array.isArray(company.agents) ? (
+                      company.agents.map((agent, index) => (
+                        <div
+                          key={agent.id}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                isRunning ? "bg-green-500" : "bg-gray-400"
+                              }`}
+                            />
+                            <div>
+                              <h4 className="font-medium text-gray-900">
+                                {agent.name}
+                              </h4>
+                              <p className="text-sm text-gray-600">
+                                {agent.type}
+                              </p>
+                            </div>
                           </div>
+                          <Badge variant="outline">
+                            {isRunning ? "运行中" : "空闲"}
+                          </Badge>
                         </div>
-                        <Badge variant="outline">{isRunning ? "运行中" : "空闲"}</Badge>
+                      ))
+                    ) : (
+                      <div className="text-center text-gray-500 py-4">
+                        暂无Agent信息
                       </div>
-                    )) || <div className="text-center text-gray-500 py-4">暂无Agent信息</div>}
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -466,7 +537,9 @@ export default function CompanyDetailPage() {
               {/* 实时日志 */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">实时日志</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    实时日志
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2 max-h-40 overflow-y-auto">

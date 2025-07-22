@@ -1,28 +1,28 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import {
+  BarChart3,
+  Bell,
   Bot,
   Building2,
-  Users,
-  Settings,
+  FileText,
+  Home,
+  Key,
   LogOut,
   Menu,
-  X,
-  Home,
-  Zap,
-  Key,
-  FileText,
-  BarChart3,
+  Settings,
   Shield,
-  Bell,
   User,
+  Users,
+  X,
+  Zap,
 } from "lucide-react"
 import Link from "next/link"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import type React from "react"
+import { useState } from "react"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -68,7 +68,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 bg-gray-600 opacity-75" onClick={() => setSidebarOpen(false)} />
+            <div
+              className="absolute inset-0 bg-gray-600 opacity-75"
+              onClick={() => setSidebarOpen(false)}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -87,7 +90,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             <span className="text-xl font-bold text-gray-900">AgentCorp</span>
           </div>
-          <button className="lg:hidden p-1 hover:bg-gray-100 rounded" onClick={() => setSidebarOpen(false)}>
+          <button
+            className="lg:hidden p-1 hover:bg-gray-100 rounded"
+            onClick={() => setSidebarOpen(false)}
+          >
             <X className="w-5 h-5 text-gray-600" />
           </button>
         </div>
@@ -98,7 +104,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`sidebar-item ${isActive(item.href) ? "active" : ""}`}
+                className={`sidebar-item ${
+                  isActive(item.href) ? "active" : ""
+                }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 <item.icon className="w-5 h-5 mr-3" />
@@ -110,14 +118,18 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {user?.role === "admin" && (
             <div className="mt-8">
               <div className="px-6 py-2">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">管理员功能</h3>
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  管理员功能
+                </h3>
               </div>
               <nav className="px-3 space-y-1">
                 {adminItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`sidebar-item ${isActive(item.href) ? "active" : ""}`}
+                    className={`sidebar-item ${
+                      isActive(item.href) ? "active" : ""
+                    }`}
                     onClick={() => setSidebarOpen(false)}
                   >
                     <item.icon className="w-5 h-5 mr-3" />
@@ -136,7 +148,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <span className="text-lg">{user?.avatar || "👤"}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {user?.name}
+              </p>
               <p className="text-xs text-gray-500 truncate">{user?.email}</p>
             </div>
           </div>
@@ -165,7 +179,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Top bar */}
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6">
-            <button className="lg:hidden p-2 hover:bg-gray-100 rounded-lg" onClick={() => setSidebarOpen(true)}>
+            <button
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+              onClick={() => setSidebarOpen(true)}
+            >
               <Menu className="w-5 h-5 text-gray-600" />
             </button>
 
@@ -182,8 +199,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <span className="text-sm">{user?.avatar || "👤"}</span>
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                  <p className="text-xs text-gray-500">{user?.role === "admin" ? "管理员" : "用户"}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {user?.role === "admin" ? "管理员" : "用户"}
+                  </p>
                 </div>
               </div>
             </div>

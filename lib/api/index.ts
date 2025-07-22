@@ -1,0 +1,22 @@
+// 统一的API导出文件
+export * from './base'
+export * from './agents'
+export * from './auth'
+export * from './companies'
+export * from './dashboard'
+export * from './logs'
+export * from './settings'
+export * from './tasks'
+export * from './tools'
+export * from './workflows'
+
+// 导出所有API实例
+export { agentsApi } from './agents'
+export { authApi } from './auth'
+export { companiesApi } from './companies'
+export { dashboardApi } from './dashboard'
+export { logsApi } from './logs'
+export { settingsApi } from './settings'
+export { tasksApi } from './tasks'
+export { toolsApi } from './tools'
+export { workflowsApi } from './workflows'

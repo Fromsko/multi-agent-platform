@@ -2,18 +2,44 @@
 
 import { Label } from "@/components/ui/label"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Search, Download, RefreshCw, AlertCircle, CheckCircle, Clock, XCircle } from "lucide-react"
-import { useAppStore } from "@/stores/useAppStore"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useAppStore } from "@/stores/useAppStore"
+import { motion } from "framer-motion"
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Download,
+  RefreshCw,
+  Search,
+  XCircle,
+} from "lucide-react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 export default function LogsPage() {
@@ -36,7 +62,7 @@ export default function LogsPage() {
         (log) =>
           log.agentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           log.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          log.id.toLowerCase().includes(searchTerm.toLowerCase()),
+          log.id.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
@@ -103,7 +129,16 @@ export default function LogsPage() {
 
   const exportLogs = () => {
     const csvContent = [
-      ["时间", "智能体", "类型", "状态", "持续时间", "输入Token", "输出Token", "成本"].join(","),
+      [
+        "时间",
+        "智能体",
+        "类型",
+        "状态",
+        "持续时间",
+        "输入Token",
+        "输出Token",
+        "成本",
+      ].join(","),
       ...filteredLogs.map((log) =>
         [
           new Date(log.timestamp).toLocaleString(),
@@ -114,7 +149,7 @@ export default function LogsPage() {
           log.tokens.input,
           log.tokens.output,
           formatCost(log.cost),
-        ].join(","),
+        ].join(",")
       ),
     ].join("\n")
 
@@ -182,7 +217,11 @@ export default function LogsPage() {
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
               {logs.length > 0
-                ? ((logs.filter((l) => l.status === "success").length / logs.length) * 100).toFixed(1)
+                ? (
+                    (logs.filter((l) => l.status === "success").length /
+                      logs.length) *
+                    100
+                  ).toFixed(1)
                 : 0}
               %
             </div>
@@ -195,7 +234,12 @@ export default function LogsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {logs.length > 0 ? formatDuration(logs.reduce((sum, log) => sum + log.duration, 0) / logs.length) : "0ms"}
+              {logs.length > 0
+                ? formatDuration(
+                    logs.reduce((sum, log) => sum + log.duration, 0) /
+                      logs.length
+                  )
+                : "0ms"}
             </div>
           </CardContent>
         </Card>
@@ -205,7 +249,9 @@ export default function LogsPage() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCost(logs.reduce((sum, log) => sum + log.cost, 0))}</div>
+            <div className="text-2xl font-bold">
+              {formatCost(logs.reduce((sum, log) => sum + log.cost, 0))}
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -276,16 +322,25 @@ export default function LogsPage() {
               </TableHeader>
               <TableBody>
                 {filteredLogs.map((log) => (
-                  <TableRow key={log.id} className="cursor-pointer hover:bg-gray-50">
-                    <TableCell className="font-mono text-sm">{new Date(log.timestamp).toLocaleString()}</TableCell>
+                  <TableRow
+                    key={log.id}
+                    className="cursor-pointer hover:bg-gray-50"
+                  >
+                    <TableCell className="font-mono text-sm">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </TableCell>
                     <TableCell>{log.agentName}</TableCell>
                     <TableCell>
-                      <Badge className={getTypeColor(log.type)}>{log.type}</Badge>
+                      <Badge className={getTypeColor(log.type)}>
+                        {log.type}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(log.status)}
-                        <Badge className={getStatusColor(log.status)}>{log.status}</Badge>
+                        <Badge className={getStatusColor(log.status)}>
+                          {log.status}
+                        </Badge>
                       </div>
                     </TableCell>
                     <TableCell>{formatDuration(log.duration)}</TableCell>
@@ -297,7 +352,11 @@ export default function LogsPage() {
                     </TableCell>
                     <TableCell>{formatCost(log.cost)}</TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedLog(log)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedLog(log)}
+                      >
                         详情
                       </Button>
                     </TableCell>
@@ -317,8 +376,12 @@ export default function LogsPage() {
           transition={{ duration: 0.6 }}
         >
           <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">暂无日志记录</h3>
-          <p className="text-gray-600">当智能体开始工作时，调用日志将显示在这里</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            暂无日志记录
+          </h3>
+          <p className="text-gray-600">
+            当智能体开始工作时，调用日志将显示在这里
+          </p>
         </motion.div>
       )}
 
@@ -340,38 +403,54 @@ export default function LogsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm font-medium">智能体</Label>
-                    <p className="text-sm text-gray-600">{selectedLog.agentName}</p>
+                    <p className="text-sm text-gray-600">
+                      {selectedLog.agentName}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">类型</Label>
-                    <Badge className={getTypeColor(selectedLog.type)}>{selectedLog.type}</Badge>
+                    <Badge className={getTypeColor(selectedLog.type)}>
+                      {selectedLog.type}
+                    </Badge>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">状态</Label>
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(selectedLog.status)}
-                      <Badge className={getStatusColor(selectedLog.status)}>{selectedLog.status}</Badge>
+                      <Badge className={getStatusColor(selectedLog.status)}>
+                        {selectedLog.status}
+                      </Badge>
                     </div>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">持续时间</Label>
-                    <p className="text-sm text-gray-600">{formatDuration(selectedLog.duration)}</p>
+                    <p className="text-sm text-gray-600">
+                      {formatDuration(selectedLog.duration)}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">输入Token</Label>
-                    <p className="text-sm text-gray-600">{selectedLog.tokens.input}</p>
+                    <p className="text-sm text-gray-600">
+                      {selectedLog.tokens.input}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">输出Token</Label>
-                    <p className="text-sm text-gray-600">{selectedLog.tokens.output}</p>
+                    <p className="text-sm text-gray-600">
+                      {selectedLog.tokens.output}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">成本</Label>
-                    <p className="text-sm text-gray-600">{formatCost(selectedLog.cost)}</p>
+                    <p className="text-sm text-gray-600">
+                      {formatCost(selectedLog.cost)}
+                    </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">时间</Label>
-                    <p className="text-sm text-gray-600">{new Date(selectedLog.timestamp).toLocaleString()}</p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(selectedLog.timestamp).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               </TabsContent>
@@ -387,7 +466,9 @@ export default function LogsPage() {
                 <div>
                   <Label className="text-sm font-medium">响应数据</Label>
                   <pre className="mt-2 p-4 bg-gray-50 rounded text-sm overflow-auto max-h-96">
-                    {selectedLog.response ? JSON.stringify(selectedLog.response, null, 2) : "无响应数据"}
+                    {selectedLog.response
+                      ? JSON.stringify(selectedLog.response, null, 2)
+                      : "无响应数据"}
                   </pre>
                 </div>
               </TabsContent>
@@ -396,8 +477,12 @@ export default function LogsPage() {
                   <Label className="text-sm font-medium">错误信息</Label>
                   {selectedLog.error ? (
                     <div className="mt-2 p-4 bg-red-50 rounded">
-                      <div className="text-sm font-medium text-red-800">错误代码: {selectedLog.error.code}</div>
-                      <div className="text-sm text-red-600 mt-1">{selectedLog.error.message}</div>
+                      <div className="text-sm font-medium text-red-800">
+                        错误代码: {selectedLog.error.code}
+                      </div>
+                      <div className="text-sm text-red-600 mt-1">
+                        {selectedLog.error.message}
+                      </div>
                     </div>
                   ) : (
                     <p className="mt-2 text-sm text-gray-600">无错误信息</p>
