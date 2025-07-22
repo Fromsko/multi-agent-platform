@@ -2,9 +2,9 @@
 
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 import { io, type Socket } from "socket.io-client"
 import { useAuth } from "./AuthContext"
-import toast from "react-hot-toast"
 
 interface WebSocketContextType {
   socket: Socket | null
@@ -13,7 +13,9 @@ interface WebSocketContextType {
   onMessage: (event: string, callback: (data: any) => void) => void
 }
 
-const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
+const WebSocketContext = createContext<WebSocketContextType | undefined>(
+  undefined
+)
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const [socket, setSocket] = useState<Socket | null>(null)
@@ -23,11 +25,24 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user) {
       // 连接WebSocket服务器
-      const newSocket = io(process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000", {
+      const wsUrl = process.env.NEXT_PUBLIC_WS_URL
+      if (!wsUrl) {
+        console.error("WebSocket URL not configured")
+        return
+      }
+
+      // 确保URL格式正确
+      const socketUrl = new URL(wsUrl)
+      const newSocket = io(socketUrl.toString(), {
         auth: {
           token: localStorage.getItem("token"),
           userId: user.id,
         },
+        transports: ["websocket"], // 强制使用WebSocket传输
+        path: "/socket.io/", // 显式指定Socket.IO路径
+        reconnection: true, // 启用重连
+        reconnectionAttempts: 5, // 最大重连次数
+        reconnectionDelay: 1000, // 重连延迟
       })
 
       newSocket.on("connect", () => {
@@ -40,9 +55,9 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
         console.log("WebSocket disconnected")
       })
 
-      newSocket.on("error", (error) => {
-        console.error("WebSocket error:", error)
-        toast.error("连接错误")
+      newSocket.on("connect_error", (error) => {
+        console.error("WebSocket connection error:", error)
+        toast.error(`连接错误: ${error.message}`)
       })
 
       // 监听Agent状态更新
@@ -63,7 +78,10 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
       setSocket(newSocket)
 
       return () => {
-        newSocket.close()
+        if (newSocket) {
+          newSocket.removeAllListeners()
+          newSocket.close()
+        }
       }
     }
   }, [user])
@@ -79,11 +97,15 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const onMessage = (event: string, callback: (data: any) => void) => {
     if (socket) {
       socket.on(event, callback)
+      // 返回清理函数
+      return () => socket.off(event, callback)
     }
   }
 
   return (
-    <WebSocketContext.Provider value={{ socket, connected, sendMessage, onMessage }}>
+    <WebSocketContext.Provider
+      value={{ socket, connected, sendMessage, onMessage }}
+    >
       {children}
     </WebSocketContext.Provider>
   )

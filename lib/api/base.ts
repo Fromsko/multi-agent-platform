@@ -40,7 +40,7 @@ export async function apiRequest<T = any>(endpoint: string, options: RequestInit
   // 添加认证头
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
   if (token) {
-    defaultHeaders["Authorization"] = `Bearer ${token}`
+    (defaultHeaders as Record<string, string>)["Authorization"] = `Bearer ${token}`
   }
 
   const config: RequestInit = {
