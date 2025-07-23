@@ -37,10 +37,11 @@ export default function ToolsPage() {
   })
 
   useEffect(() => {
-    setTools(mockDataStore.getTools())
+    const toolsData = mockDataStore.getTools()
+    setTools(toolsData || [])
   }, [])
 
-  const filteredTools = tools.filter((tool) => {
+  const filteredTools = (tools || []).filter((tool) => {
     const matchesSearch =
       tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tool.description.toLowerCase().includes(searchTerm.toLowerCase())

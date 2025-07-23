@@ -1,73 +1,26 @@
-{
-  "logs": [
-    {
-      "id": "1",
-      "timestamp": "2024-01-20T14:30:25Z",
-      "agentId": "1",
-      "agentName": "客服助手",
-      "type": "chat",
-      "status": "success",
-      "duration": 1200,
-      "tokens": {
-        "input": 45,
-        "output": 128
-      },
-      "cost": 0.0034,
-      "request": {
-        "message": "用户询问退款政策",
-        "model": "gpt-4",
-        "temperature": 0.7
-      },
-      "response": {
-        "message": "根据我们的退款政策，您可以在购买后30天内申请退款...",
-        "finishReason": "stop"
-      }
-    },
-    {
-      "id": "2",
-      "timestamp": "2024-01-20T14:28:15Z",
-      "agentId": "2",
-      "agentName": "数据分析师",
-      "type": "analysis",
-      "status": "success",
-      "duration": 2100,
-      "tokens": {
-        "input": 256,
-        "output": 512
-      },
-      "cost": 0.0156,
-      "request": {
-        "message": "分析用户行为数据",
-        "model": "gpt-4",
-        "temperature": 0.3
-      },
-      "response": {
-        "message": "基于提供的数据，用户行为呈现以下特征...",
-        "finishReason": "stop"
-      }
-    },
-    {
-      "id": "3",
-      "timestamp": "2024-01-20T14:25:10Z",
-      "agentId": "1",
-      "agentName": "客服助手",
-      "type": "chat",
-      "status": "error",
-      "duration": 5000,
-      "tokens": {
-        "input": 32,
-        "output": 0
-      },
-      "cost": 0.0008,
-      "request": {
-        "message": "用户咨询产品功能",
-        "model": "gpt-4",
-        "temperature": 0.7
-      },
-      "error": {
-        "code": "rate_limit_exceeded",
-        "message": "API调用频率超限"
-      }
-    }
-  ]
-}
+[
+  {
+    "id": "log-1",
+    "timestamp": "2024-01-20T15:30:00Z",
+    "level": "info",
+    "message": "Agent客服助手启动成功",
+    "agentId": "agent-1",
+    "userId": "user-1"
+  },
+  {
+    "id": "log-2",
+    "timestamp": "2024-01-20T15:25:00Z",
+    "level": "warning",
+    "message": "API调用频率接近限制",
+    "agentId": "agent-2",
+    "userId": "user-2"
+  },
+  {
+    "id": "log-3",
+    "timestamp": "2024-01-20T15:20:00Z",
+    "level": "error",
+    "message": "模型调用失败，正在重试",
+    "agentId": "agent-3",
+    "userId": "user-1"
+  }
+]

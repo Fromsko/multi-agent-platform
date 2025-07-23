@@ -23,14 +23,14 @@ export default function CompaniesPage() {
     setCompanies(mockDataStore.getCompanies())
   }, [])
 
-  const filteredCompanies = companies.filter((company) => {
+  const filteredCompanies = companies?.filter((company) => {
     const matchesSearch =
       company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       company.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === "all" || company.status === statusFilter
     const matchesType = typeFilter === "all" || company.type === typeFilter
     return matchesSearch && matchesStatus && matchesType
-  })
+  }) || []
 
   const getStatusColor = (status: string) => {
     switch (status) {

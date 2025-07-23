@@ -347,11 +347,11 @@ export default function RegisterPage() {
               />
               <label htmlFor="agree-terms" className="ml-2 block text-sm text-secondary-700">
                 我同意
-                <a href="/terms" className="text-primary-600 hover:text-primary-500 mx-1">
+                <a href="#" className="text-primary-600 hover:text-primary-500 mx-1">
                   服务条款
                 </a>
                 和
-                <a href="/privacy" className="text-primary-600 hover:text-primary-500 mx-1">
+                <a href="#" className="text-primary-600 hover:text-primary-500 mx-1">
                   隐私政策
                 </a>
               </label>

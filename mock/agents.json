@@ -1,61 +1,47 @@
-{
-  "agents": [
-    {
-      "id": "1",
-      "name": "客服助手",
-      "description": "处理客户咨询和问题解答",
-      "type": "对话型",
-      "status": "active",
-      "lastActivity": "2分钟前",
-      "interactions": 156,
-      "successRate": 98.5,
-      "avatar": "🤖",
-      "companyId": "1",
-      "skills": ["自然语言处理", "外部工具调用", "记忆管理"],
-      "config": {
-        "temperature": 0.7,
-        "maxTokens": 2048,
-        "memoryLength": 10
-      },
-      "createdAt": "2024-01-15T08:30:00Z"
-    },
-    {
-      "id": "2",
-      "name": "数据分析师",
-      "description": "执行数据分析和报告生成",
-      "type": "分析型",
-      "status": "idle",
-      "lastActivity": "1小时前",
-      "interactions": 89,
-      "successRate": 96.2,
-      "avatar": "📊",
-      "companyId": "2",
-      "skills": ["数据计算", "逻辑推理", "外部工具调用"],
-      "config": {
-        "temperature": 0.3,
-        "maxTokens": 4096,
-        "memoryLength": 15
-      },
-      "createdAt": "2024-01-16T09:00:00Z"
-    },
-    {
-      "id": "3",
-      "name": "文档助手",
-      "description": "文档处理和内容生成",
-      "type": "生成型",
-      "status": "active",
-      "lastActivity": "5分钟前",
-      "interactions": 234,
-      "successRate": 99.1,
-      "avatar": "📝",
-      "companyId": "3",
-      "skills": ["自然语言处理", "多模态处理", "记忆管理"],
-      "config": {
-        "temperature": 0.8,
-        "maxTokens": 3072,
-        "memoryLength": 8
-      },
-      "createdAt": "2024-01-17T11:20:00Z"
-    }
-  ]
-}
+[
+  {
+    "id": "agent-1",
+    "name": "客服助手",
+    "description": "专业的客户服务智能体，能够处理常见问题和投诉",
+    "type": "对话型",
+    "status": "running",
+    "avatar": "🤖",
+    "model": "gpt-4",
+    "interactions": 1250,
+    "successRate": 95,
+    "lastActivity": "2分钟前",
+    "skills": ["客户服务", "问题解答", "情感分析"],
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:22:00Z"
+  },
+  {
+    "id": "agent-2",
+    "name": "数据分析师",
+    "description": "专门用于数据分析和报告生成的智能体",
+    "type": "分析型",
+    "status": "idle",
+    "avatar": "📊",
+    "model": "gpt-4",
+    "interactions": 890,
+    "successRate": 98,
+    "lastActivity": "1小时前",
+    "skills": ["数据分析", "报告生成", "可视化"],
+    "createdAt": "2024-01-10T09:15:00Z",
+    "updatedAt": "2024-01-19T16:45:00Z"
+  },
+  {
+    "id": "agent-3",
+    "name": "内容创作者",
+    "description": "负责创建各种类型的营销内容和文案",
+    "type": "生成型",
+    "status": "running",
+    "avatar": "✍️",
+    "model": "gpt-3.5-turbo",
+    "interactions": 2100,
+    "successRate": 92,
+    "lastActivity": "刚刚",
+    "skills": ["文案写作", "创意策划", "SEO优化"],
+    "createdAt": "2024-01-08T14:20:00Z",
+    "updatedAt": "2024-01-20T15:10:00Z"
+  }
+]

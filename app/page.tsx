@@ -1,26 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion"
 import {
+  ArrowRight,
   Bot,
   Building2,
-  Users,
-  Zap,
-  ArrowRight,
-  Shield,
-  Globe,
-  Sparkles,
-  Rocket,
-  Target,
-  Star,
-  Play,
   ChevronDown,
+  Globe,
   Menu,
+  Play,
+  Rocket,
+  Shield,
+  Sparkles,
+  Star,
+  Target,
+  Users,
   X,
+  Zap,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function HomePage() {
   const { user } = useAuth()
@@ -100,10 +100,8 @@ export default function HomePage() {
   ]
 
   const stats = [
-    { number: "10,000+", label: "活跃用户", icon: Users },
-    { number: "50,000+", label: "AI Agent", icon: Bot },
-    { number: "1,000+", label: "企业客户", icon: Building2 },
-    { number: "99.9%", label: "服务可用性", icon: Shield },
+    { number: "100+", label: "活跃用户", icon: Users },
+    { number: "50+", label: "AI Agent", icon: Bot },
   ]
 
   return (
@@ -135,19 +133,17 @@ export default function HomePage() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <nav className="flex items-center space-x-6">
-              {["产品", "解决方案", "定价", "文档"].map((item, index) => (
-                <motion.a
-                  key={item}
-                  href="#"
-                  className="text-gray-600 hover:text-primary-600 font-medium transition-colors relative group"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all group-hover:w-full" />
-                </motion.a>
-              ))}
+              <motion.a
+                key="文档"
+                href="#"
+                className="text-gray-600 hover:text-primary-600 font-medium transition-colors relative group"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                文档
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all group-hover:w-full" />
+              </motion.a>
             </nav>
             <motion.div
               className="flex items-center space-x-4"
@@ -176,7 +172,11 @@ export default function HomePage() {
             className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
@@ -191,11 +191,13 @@ export default function HomePage() {
               transition={{ duration: 0.3 }}
             >
               <div className="px-4 py-6 space-y-4">
-                {["产品", "解决方案", "定价", "文档"].map((item) => (
-                  <a key={item} href="#" className="block text-gray-600 hover:text-primary-600 font-medium">
-                    {item}
+                <a
+                  key="文档"
+                  href="#"
+                  className="block text-gray-600 hover:text-primary-600 font-medium"
+                  >
+                    文档
                   </a>
-                ))}
                 <div className="pt-4 border-t border-gray-200 space-y-3">
                   <button
                     onClick={() => router.push("/auth/login")}
@@ -203,7 +205,10 @@ export default function HomePage() {
                   >
                     登录
                   </button>
-                  <button onClick={() => router.push("/auth/register")} className="btn-primary w-full">
+                  <button
+                    onClick={() => router.push("/auth/register")}
+                    className="btn-primary w-full"
+                  >
                     免费注册
                   </button>
                 </div>
@@ -243,7 +248,8 @@ export default function HomePage() {
                 </h2>
 
                 <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
-                  通过智能Agent模拟真实公司运营，让AI员工协作完成复杂项目。 从软件开发到市场调研，打造属于您的虚拟企业。
+                  通过智能Agent模拟真实公司运营，让AI员工协作完成复杂项目。
+                  从软件开发到市场调研，打造属于您的虚拟企业。
                 </p>
               </div>
 
@@ -272,14 +278,16 @@ export default function HomePage() {
 
               {/* Stats */}
               <motion.div
-                className="grid grid-cols-2 gap-6 pt-8"
+                className="flex space-x-16 pt-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
                 {stats.slice(0, 2).map((stat, index) => (
                   <div key={index} className="text-center sm:text-left">
-                    <div className="text-3xl font-bold text-gray-900">{stat.number}</div>
+                    <div className="text-3xl font-bold text-gray-900">
+                      {stat.number}
+                    </div>
                     <div className="text-gray-600 flex items-center justify-center sm:justify-start space-x-2">
                       <stat.icon className="w-4 h-4" />
                       <span>{stat.label}</span>
@@ -309,16 +317,30 @@ export default function HomePage() {
                       <Building2 className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">AI软件开发公司</h3>
+                      <h3 className="font-semibold text-gray-900">
+                        AI软件开发公司
+                      </h3>
                       <p className="text-gray-500 text-sm">5个Agent正在协作</p>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     {[
-                      { name: "产品经理AI", status: "规划中", color: "bg-blue-500" },
-                      { name: "前端开发AI", status: "开发中", color: "bg-green-500" },
-                      { name: "后端开发AI", status: "测试中", color: "bg-yellow-500" },
+                      {
+                        name: "产品经理AI",
+                        status: "规划中",
+                        color: "bg-blue-500",
+                      },
+                      {
+                        name: "前端开发AI",
+                        status: "开发中",
+                        color: "bg-green-500",
+                      },
+                      {
+                        name: "后端开发AI",
+                        status: "测试中",
+                        color: "bg-yellow-500",
+                      },
                     ].map((agent, index) => (
                       <motion.div
                         key={index}
@@ -328,10 +350,16 @@ export default function HomePage() {
                         transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className={`w-3 h-3 ${agent.color} rounded-full animate-pulse`} />
-                          <span className="font-medium text-gray-900">{agent.name}</span>
+                          <div
+                            className={`w-3 h-3 ${agent.color} rounded-full animate-pulse`}
+                          />
+                          <span className="font-medium text-gray-900">
+                            {agent.name}
+                          </span>
                         </div>
-                        <span className="text-sm text-gray-500">{agent.status}</span>
+                        <span className="text-sm text-gray-500">
+                          {agent.status}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
@@ -349,7 +377,11 @@ export default function HomePage() {
                 <motion.div
                   className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg"
                   animate={{ y: [0, -15, 0] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+                  transition={{
+                    duration: 3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: 1,
+                  }}
                 >
                   <Target className="w-6 h-6 text-white" />
                 </motion.div>
@@ -368,12 +400,20 @@ export default function HomePage() {
           <motion.div
             className="absolute top-40 right-20 w-24 h-24 bg-blue-300 rounded-full opacity-20"
             animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
-            transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
+            transition={{
+              duration: 15,
+              repeat: Number.POSITIVE_INFINITY,
+              delay: 2,
+            }}
           />
           <motion.div
             className="absolute bottom-40 left-20 w-20 h-20 bg-purple-300 rounded-full opacity-20"
             animate={{ scale: [1, 1.5, 1], rotate: [0, -180, -360] }}
-            transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, delay: 4 }}
+            transition={{
+              duration: 25,
+              repeat: Number.POSITIVE_INFINITY,
+              delay: 4,
+            }}
           />
         </div>
       </section>
@@ -398,7 +438,9 @@ export default function HomePage() {
               <Star className="w-4 h-4" />
               <span>核心优势</span>
             </motion.div>
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">为什么选择 AgentCorp？</h3>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              为什么选择 AgentCorp？
+            </h3>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               我们提供最先进的AI Agent管理平台，让您轻松构建和管理虚拟公司
             </p>
@@ -409,7 +451,9 @@ export default function HomePage() {
               <motion.div
                 key={index}
                 className={`card hover:shadow-xl transition-all duration-300 cursor-pointer group relative overflow-hidden ${
-                  activeFeature === index ? "ring-2 ring-primary-500 shadow-xl" : ""
+                  activeFeature === index
+                    ? "ring-2 ring-primary-500 shadow-xl"
+                    : ""
                 }`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -433,7 +477,9 @@ export default function HomePage() {
                   <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
                     {feature.title}
                   </h4>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
 
                   <motion.div
                     className="mt-4 flex items-center text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -464,34 +510,36 @@ export default function HomePage() {
             <p className="text-xl text-primary-100">全球用户的信任选择</p>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-16 max-w-md">
+              {stats.map((stat, index) => (
                 <motion.div
-                  className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <stat.icon className="w-8 h-8 text-white" />
-                </motion.div>
-                <motion.div
-                  className="text-4xl font-bold text-white mb-2"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                  key={index}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  {stat.number}
+                  <motion.div
+                    className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                  >
+                    <stat.icon className="w-8 h-8 text-white" />
+                  </motion.div>
+                  <motion.div
+                    className="text-4xl font-bold text-white mb-2"
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    {stat.number}
+                  </motion.div>
+                  <div className="text-primary-100">{stat.label}</div>
                 </motion.div>
-                <div className="text-primary-100">{stat.label}</div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
@@ -523,8 +571,12 @@ export default function HomePage() {
               <Rocket className="w-10 h-10 text-white" />
             </motion.div>
 
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">准备好创建您的AI公司了吗？</h3>
-            <p className="text-xl text-gray-600 mb-8">加入数千家企业，体验AI驱动的未来工作方式</p>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              准备好创建您的AI公司了吗？
+            </h3>
+            <p className="text-xl text-gray-600 mb-8">
+              加入数千家企业，体验AI驱动的未来工作方式
+            </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <motion.button
@@ -552,53 +604,27 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="px-4 py-12 bg-gray-900">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-1 md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 mb-8">
+            <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-gradient-to-r from-primary-600 to-blue-600 rounded-xl flex items-center justify-center">
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold text-white">AgentCorp</span>
               </div>
-              <p className="text-gray-400 mb-4 max-w-md">构建智能AI公司，让Agent协作完成复杂项目，体验未来工作方式。</p>
-              <div className="flex space-x-4">
-                {["微信", "微博", "LinkedIn"].map((social) => (
-                  <a
-                    key={social}
-                    href="#"
-                    className="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-lg flex items-center justify-center transition-colors"
-                  >
-                    <span className="text-white text-sm">{social[0]}</span>
-                  </a>
-                ))}
-              </div>
+              <p className="text-gray-400 mb-4 max-w-md">
+                构建智能AI公司，让Agent协作完成复杂项目，体验未来工作方式。
+              </p>
+
             </div>
 
-            <div>
-              <h4 className="text-white font-semibold mb-4">产品</h4>
-              <div className="space-y-2">
-                {["Agent管理", "公司模拟", "工作流程", "API接口"].map((item) => (
-                  <a key={item} href="#" className="block text-gray-400 hover:text-white transition-colors">
-                    {item}
-                  </a>
-                ))}
-              </div>
-            </div>
 
-            <div>
-              <h4 className="text-white font-semibold mb-4">支持</h4>
-              <div className="space-y-2">
-                {["帮助中心", "API文档", "社区论坛", "联系我们"].map((item) => (
-                  <a key={item} href="#" className="block text-gray-400 hover:text-white transition-colors">
-                    {item}
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
-            <p className="text-gray-400 mb-4 md:mb-0">&copy; 2024 AgentCorp. 保留所有权利。</p>
+            <p className="text-gray-400 mb-4 md:mb-0">
+              &copy; 2025 AgentCorp. 保留所有权利。
+            </p>
             <div className="flex items-center space-x-6 text-gray-400">
               <a href="/privacy" className="hover:text-white transition-colors">
                 隐私政策
@@ -618,7 +644,10 @@ export default function HomePage() {
       <motion.button
         className="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg flex items-center justify-center z-50"
         initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: scrollYProgress.get() > 0.2 ? 1 : 0, scale: scrollYProgress.get() > 0.2 ? 1 : 0 }}
+        animate={{
+          opacity: scrollYProgress.get() > 0.2 ? 1 : 0,
+          scale: scrollYProgress.get() > 0.2 ? 1 : 0,
+        }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -1,60 +1,95 @@
 {
   "tools": [
     {
-      "id": "1",
-      "name": "Web搜索工具",
-      "description": "通过搜索引擎获取实时信息",
+      "id": "tool-1",
+      "name": "网页搜索",
+      "description": "搜索互联网上的信息",
       "type": "search",
       "status": "active",
-      "provider": "serp-api",
+      "provider": "custom",
       "config": {
-        "apiKey": "****",
-        "engine": "google",
-        "maxResults": 10
+        "apiEndpoint": "https://api.search.com",
+        "apiKey": "search-key-123"
       },
       "usage": {
         "calls": 1250,
-        "errors": 12,
-        "avgResponseTime": 850
+        "errors": 5,
+        "avgResponseTime": 150
       },
-      "createdAt": "2024-01-15T08:00:00Z"
+      "createdAt": "2024-01-01T00:00:00Z"
     },
     {
-      "id": "2",
-      "name": "代码执行器",
-      "description": "安全的代码执行环境",
-      "type": "code",
+      "id": "tool-2",
+      "name": "代码执行",
+      "description": "执行Python代码",
+      "type": "api",
       "status": "active",
-      "provider": "sandbox",
+      "provider": "openai",
       "config": {
-        "timeout": 30,
-        "memoryLimit": "512MB",
-        "languages": ["python", "javascript", "bash"]
+        "apiEndpoint": "https://api.openai.com/v1/code",
+        "apiKey": "openai-key-456"
       },
       "usage": {
         "calls": 890,
-        "errors": 45,
-        "avgResponseTime": 1200
+        "errors": 12,
+        "avgResponseTime": 200
       },
-      "createdAt": "2024-01-16T09:30:00Z"
+      "createdAt": "2024-01-05T00:00:00Z"
     },
     {
-      "id": "3",
-      "name": "文件处理器",
-      "description": "处理各种格式的文件",
-      "type": "file",
-      "status": "maintenance",
-      "provider": "internal",
+      "id": "tool-3",
+      "name": "图像生成",
+      "description": "生成AI图像",
+      "type": "api",
+      "status": "active",
+      "provider": "dalle",
       "config": {
-        "maxFileSize": "10MB",
-        "supportedFormats": ["pdf", "docx", "xlsx", "csv"]
+        "apiEndpoint": "https://api.openai.com/v1/images",
+        "apiKey": "dalle-key-789"
       },
       "usage": {
         "calls": 456,
-        "errors": 8,
-        "avgResponseTime": 2100
+        "errors": 3,
+        "avgResponseTime": 3000
       },
-      "createdAt": "2024-01-17T14:20:00Z"
+      "createdAt": "2024-01-10T00:00:00Z"
+    },
+    {
+      "id": "tool-4",
+      "name": "数据库查询",
+      "description": "查询数据库信息",
+      "type": "database",
+      "status": "active",
+      "provider": "mysql",
+      "config": {
+        "host": "localhost",
+        "port": 3306,
+        "database": "agent_db"
+      },
+      "usage": {
+        "calls": 320,
+        "errors": 8,
+        "avgResponseTime": 50
+      },
+      "createdAt": "2024-01-15T00:00:00Z"
+    },
+    {
+      "id": "tool-5",
+      "name": "文件处理",
+      "description": "处理和分析文件",
+      "type": "file",
+      "status": "maintenance",
+      "provider": "custom",
+      "config": {
+        "maxFileSize": "10MB",
+        "supportedFormats": ["pdf", "docx", "txt"]
+      },
+      "usage": {
+        "calls": 180,
+        "errors": 15,
+        "avgResponseTime": 500
+      },
+      "createdAt": "2024-01-20T00:00:00Z"
     }
   ]
 }

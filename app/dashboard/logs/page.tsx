@@ -61,7 +61,7 @@ export default function LogsPage() {
       filtered = filtered.filter(
         (log) =>
           log.agentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          log.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (log.type && log.type.toLowerCase().includes(searchTerm.toLowerCase())) ||
           log.id.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
@@ -71,7 +71,7 @@ export default function LogsPage() {
     }
 
     if (typeFilter !== "all") {
-      filtered = filtered.filter((log) => log.type === typeFilter)
+      filtered = filtered.filter((log) => log.type && log.type === typeFilter)
     }
 
     setFilteredLogs(filtered)
@@ -103,7 +103,9 @@ export default function LogsPage() {
     }
   }
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (type?: string) => {
+    if (!type) return "bg-gray-100 text-gray-800"
+    
     switch (type.toLowerCase()) {
       case "chat":
         return "bg-blue-100 text-blue-800"
@@ -142,13 +144,13 @@ export default function LogsPage() {
       ...filteredLogs.map((log) =>
         [
           new Date(log.timestamp).toLocaleString(),
-          log.agentName,
-          log.type,
-          log.status,
-          formatDuration(log.duration),
-          log.tokens.input,
-          log.tokens.output,
-          formatCost(log.cost),
+          log.agentName || "",
+          log.type || "未知",
+          log.status || "",
+          formatDuration(log.duration || 0),
+          log.tokens?.input || 0,
+          log.tokens?.output || 0,
+          formatCost(log.cost || 0),
         ].join(",")
       ),
     ].join("\n")
@@ -236,7 +238,7 @@ export default function LogsPage() {
             <div className="text-2xl font-bold">
               {logs.length > 0
                 ? formatDuration(
-                    logs.reduce((sum, log) => sum + log.duration, 0) /
+                    logs.reduce((sum, log) => sum + (log.duration || 0), 0) /
                       logs.length
                   )
                 : "0ms"}
@@ -250,7 +252,7 @@ export default function LogsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatCost(logs.reduce((sum, log) => sum + log.cost, 0))}
+              {formatCost(logs.reduce((sum, log) => sum + (log.cost || 0), 0))}
             </div>
           </CardContent>
         </Card>
@@ -332,7 +334,7 @@ export default function LogsPage() {
                     <TableCell>{log.agentName}</TableCell>
                     <TableCell>
                       <Badge className={getTypeColor(log.type)}>
-                        {log.type}
+                        {log.type || "未知"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -343,14 +345,14 @@ export default function LogsPage() {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell>{formatDuration(log.duration)}</TableCell>
+                    <TableCell>{formatDuration(log.duration || 0)}</TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        <div>输入: {log.tokens.input}</div>
-                        <div>输出: {log.tokens.output}</div>
+                        <div>输入: {log.tokens?.input || 0}</div>
+                        <div>输出: {log.tokens?.output || 0}</div>
                       </div>
                     </TableCell>
-                    <TableCell>{formatCost(log.cost)}</TableCell>
+                    <TableCell>{formatCost(log.cost || 0)}</TableCell>
                     <TableCell>
                       <Button
                         variant="ghost"
@@ -410,8 +412,8 @@ export default function LogsPage() {
                   <div>
                     <Label className="text-sm font-medium">类型</Label>
                     <Badge className={getTypeColor(selectedLog.type)}>
-                      {selectedLog.type}
-                    </Badge>
+                    {selectedLog.type || "未知"}
+                  </Badge>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">状态</Label>
@@ -425,31 +427,31 @@ export default function LogsPage() {
                   <div>
                     <Label className="text-sm font-medium">持续时间</Label>
                     <p className="text-sm text-gray-600">
-                      {formatDuration(selectedLog.duration)}
+                      {formatDuration(selectedLog.duration || 0)}
                     </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">输入Token</Label>
                     <p className="text-sm text-gray-600">
-                      {selectedLog.tokens.input}
+                      {selectedLog.tokens?.input || 0}
                     </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">输出Token</Label>
                     <p className="text-sm text-gray-600">
-                      {selectedLog.tokens.output}
+                      {selectedLog.tokens?.output || 0}
                     </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">成本</Label>
                     <p className="text-sm text-gray-600">
-                      {formatCost(selectedLog.cost)}
+                      {formatCost(selectedLog.cost || 0)}
                     </p>
                   </div>
                   <div>
                     <Label className="text-sm font-medium">时间</Label>
                     <p className="text-sm text-gray-600">
-                      {new Date(selectedLog.timestamp).toLocaleString()}
+                      {selectedLog.timestamp ? new Date(selectedLog.timestamp).toLocaleString() : "未知"}
                     </p>
                   </div>
                 </div>

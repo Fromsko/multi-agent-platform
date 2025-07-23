@@ -1,58 +1,28 @@
-{
-  "companies": [
-    {
-      "id": "1",
-      "name": "软件开发公司",
-      "type": "software",
-      "description": "专注于Web和移动应用开发的虚拟公司",
-      "agents": 6,
-      "status": "active",
-      "currentProject": "E-commerce平台开发",
-      "progress": 75,
-      "createdAt": "2024-01-15T08:00:00Z",
-      "lastActivity": "2分钟前",
-      "revenue": 125000,
-      "tasks": {
-        "completed": 45,
-        "inProgress": 8,
-        "pending": 12
-      }
-    },
-    {
-      "id": "2",
-      "name": "市场调研公司",
-      "type": "research",
-      "description": "提供专业市场分析和商业洞察服务",
-      "agents": 4,
-      "status": "active",
-      "currentProject": "科技行业趋势分析",
-      "progress": 45,
-      "createdAt": "2024-01-20T10:30:00Z",
-      "lastActivity": "15分钟前",
-      "revenue": 85000,
-      "tasks": {
-        "completed": 28,
-        "inProgress": 5,
-        "pending": 7
-      }
-    },
-    {
-      "id": "3",
-      "name": "内容创作公司",
-      "type": "content",
-      "description": "专业的内容创作和营销文案服务",
-      "agents": 5,
-      "status": "idle",
-      "currentProject": "品牌营销文案",
-      "progress": 90,
-      "createdAt": "2024-01-25T14:15:00Z",
-      "lastActivity": "2小时前",
-      "revenue": 95000,
-      "tasks": {
-        "completed": 67,
-        "inProgress": 2,
-        "pending": 3
-      }
-    }
-  ]
-}
+[
+  {
+    "id": "company-1",
+    "name": "科技创新有限公司",
+    "description": "专注于AI技术研发的科技公司",
+    "industry": "科技",
+    "size": "中型",
+    "status": "active",
+    "logo": "🏢",
+    "agentCount": 15,
+    "userCount": 120,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-20T10:30:00Z"
+  },
+  {
+    "id": "company-2",
+    "name": "智能服务集团",
+    "description": "提供智能客服解决方案的服务公司",
+    "industry": "服务业",
+    "size": "大型",
+    "status": "active",
+    "logo": "🏭",
+    "agentCount": 45,
+    "userCount": 350,
+    "createdAt": "2023-12-15T00:00:00Z",
+    "updatedAt": "2024-01-19T16:45:00Z"
+  }
+]

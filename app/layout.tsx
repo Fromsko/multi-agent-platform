@@ -5,7 +5,6 @@ import "./globals.css"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { WebSocketProvider } from "@/contexts/WebSocketContext"
 import { Toaster } from "react-hot-toast"
-import { WebSocketManager } from "@/components/common/WebSocketManager"
 import { QueueManager } from "@/components/common/QueueManager"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -51,7 +50,6 @@ export default function RootLayout({
                 },
               }}
             />
-            <WebSocketManager />
             <QueueManager />
           </WebSocketProvider>
         </AuthProvider>

@@ -138,7 +138,7 @@ class MockDataStore {
   private apiKeys: ApiKey[] = apiKeysData.apiKeys
   private tools: Tool[] = toolsData.tools
   private prompts: Prompt[] = promptsData.prompts
-  private logs: Log[] = logsData.logs
+  private logs: Log[] = Array.isArray(logsData) ? logsData : []
   private performance: Performance[] = performanceData.performance
   private activities: Activity[] = activitiesData.activities
 

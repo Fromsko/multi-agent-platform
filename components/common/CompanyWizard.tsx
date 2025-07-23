@@ -135,8 +135,8 @@ export function CompanyWizard({ onComplete, onCancel }: CompanyWizardProps) {
     onComplete(formData)
   }
 
-  const agents = mockDataStore.getAgents()
-  const tools = mockDataStore.getTools()
+  const agents = mockDataStore.getAgents() || []
+  const tools = mockDataStore.getTools() || []
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">

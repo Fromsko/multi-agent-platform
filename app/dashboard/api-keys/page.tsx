@@ -244,7 +244,7 @@ export default function ApiKeysPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
       >
-        {apiKeys.map((apiKey, index) => (
+        {(apiKeys || [])?.map((apiKey, index) => (
           <motion.div
             key={apiKey.id}
             initial={{ opacity: 0, y: 20 }}
@@ -320,7 +320,7 @@ export default function ApiKeysPage() {
         ))}
       </motion.div>
 
-      {apiKeys.length === 0 && (
+      {(apiKeys || []).length === 0 && (
         <motion.div
           className="text-center py-12"
           initial={{ opacity: 0 }}

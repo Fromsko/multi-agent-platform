@@ -290,7 +290,7 @@ export default function PromptsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
       >
-        {prompts.map((prompt, index) => (
+        {prompts?.map((prompt, index) => (
           <motion.div
             key={prompt.id}
             initial={{ opacity: 0, y: 20 }}
@@ -379,7 +379,7 @@ export default function PromptsPage() {
         ))}
       </motion.div>
 
-      {prompts.length === 0 && (
+      {(!prompts || prompts.length === 0) && (
         <motion.div
           className="text-center py-12"
           initial={{ opacity: 0 }}

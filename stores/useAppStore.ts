@@ -1,16 +1,16 @@
-import { create } from "zustand"
 import {
   mockDataStore,
-  type Company,
+  type Activity,
   type Agent,
   type ApiKey,
-  type Tool,
-  type Prompt,
+  type Company,
   type Log,
   type Performance,
-  type Activity,
+  type Prompt,
+  type Tool,
 } from "@/lib/mock-data"
 import toast from "react-hot-toast"
+import { create } from "zustand"
 
 interface User {
   id: string
@@ -77,11 +77,11 @@ interface AppState {
   selectedAgent: Agent | null
 
   // WebSocket
-  wsConnected: boolean
+  // wsConnected 状态已移除，使用 WebSocketContext 中的 connected 状态代替
 
   // Actions
   setLoading: (loading: boolean) => void
-  setWsConnected: (connected: boolean) => void
+  // setWsConnected 已移除
 
   // Company actions
   loadCompanies: () => void
@@ -185,11 +185,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   isLoading: false,
   selectedCompany: null,
   selectedAgent: null,
-  wsConnected: false,
 
   // Basic actions
   setLoading: (loading) => set({ isLoading: loading }),
-  setWsConnected: (connected) => set({ wsConnected: connected }),
 
   // Company actions
   loadCompanies: () => {
